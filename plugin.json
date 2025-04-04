@@ -1,0 +1,10 @@
+{
+  "name": "Decky Deck Clock",
+  "author": "Decky Plugin",
+  "flags": [],
+  "publish": {
+    "tags": ["clock", "time", "widget"],
+    "description": "A clock widget for Steam Deck that displays various time metrics",
+    "image": "https://opengraph.githubassets.com/1/SteamDeckHomebrew/decky-loader"
+  }
+}

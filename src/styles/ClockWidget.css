@@ -1,0 +1,84 @@
+/* Clock Widget Styles */
+.clock-widget-container {
+  position: relative;
+  width: 100%;
+  font-family: sans-serif;
+}
+
+.clock-widget-main {
+  background-color: #1B2838;
+  color: #FFFFFF;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.clock-widget-main h3 {
+  margin-top: 0;
+  color: #66C0F4;
+  font-size: 18px;
+}
+
+.clock-display-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  padding: 8px;
+  background-color: rgba(27, 40, 56, 0.6);
+  border-radius: 4px;
+}
+
+.clock-label {
+  font-size: 14px;
+  color: #66C0F4;
+}
+
+.time-display {
+  font-family: monospace;
+  font-size: 16px;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
+/* Floating widget that shows in the corner */
+.clock-widget-float {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(27, 40, 56, 0.8);
+  color: #FFFFFF;
+  padding: 8px 12px;
+  border-radius: 6px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  border: 1px solid #1A9FFF;
+  transition: all 0.3s ease;
+}
+
+.clock-widget-float.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.clock-widget-float.hidden {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.clock-widget-float:hover {
+  background-color: rgba(27, 40, 56, 0.95);
+}
+
+.clock-widget-label {
+  font-size: 12px;
+  margin-bottom: 2px;
+  color: #66C0F4;
+}
+
+.clock-widget-float .time-display {
+  font-size: 14px;
+}
