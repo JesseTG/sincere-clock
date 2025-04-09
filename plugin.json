@@ -1,10 +1,11 @@
 {
-  "name": "Decky Deck Clock",
-  "author": "Decky Plugin",
-  "flags": [],
+  "name": "Sincere Clock",
+  "author": "Jesse Talavera",
+  "flags": ["debug", "_root"],
+  "api_version": 1,
   "publish": {
-    "tags": ["clock", "time", "widget"],
-    "description": "A clock widget for Steam Deck that displays various time metrics",
-    "image": "https://opengraph.githubassets.com/1/SteamDeckHomebrew/decky-loader"
+    "tags": ["clock"],
+    "description": "A Decky plugin that displays the time since your game was launched.",
+    "image": "https://opengraph.githubassets.com/1/SteamDeckHomebrew/PluginLoader"
   }
 }
