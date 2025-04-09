@@ -1,4 +1,4 @@
-import { 
+import {
   ServerAPI,
   PanelSection,
   PanelSectionRow
@@ -7,21 +7,21 @@ import React, { useEffect, useState } from "react";
 import { ClockWidget } from "./components/ClockWidget";
 
 // Main Plugin Component
-export const DeckyDeckClockPlugin: React.FC = () => {
+export const SincereClockPlugin: React.FC = () => {
   // Application state
   const [isGameRunning, setIsGameRunning] = useState<boolean>(false);
   const [currentGameStartTime, setCurrentGameStartTime] = useState<Date | null>(null);
   const [steamStartTime] = useState<Date>(new Date());
   const [bootTime] = useState<Date>(new Date());
   const [wakeTime, setWakeTime] = useState<Date>(new Date());
-  
+
   useEffect(() => {
     // Handle game session tracking
     const checkGameStatus = () => {
       // In a real implementation, this would use actual Steam APIs
       // to check if a game is running and get the current game information
       const gameRunning = (window as any).App?.GameSessions?.GetCurrentGameID() !== 0;
-      
+
       if (gameRunning && !isGameRunning) {
         // Game just started
         setCurrentGameStartTime(new Date());
@@ -60,7 +60,7 @@ export const DeckyDeckClockPlugin: React.FC = () => {
   return (
     <PanelSection title="Deck Clock">
       <PanelSectionRow>
-        <ClockWidget 
+        <ClockWidget
           isGameRunning={isGameRunning}
           gameStartTime={currentGameStartTime}
           steamStartTime={steamStartTime}

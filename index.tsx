@@ -1,12 +1,12 @@
 import React from "react";
 import { definePlugin } from "decky-frontend-lib";
 import { FaRegClock } from "react-icons/fa";
-import { DeckyDeckClockPlugin } from "./src/index";
+import { SincereClockPlugin } from "./src/index";
 
 export default definePlugin(() => {
   return {
-    title: "Decky Deck Clock",
-    content: <DeckyDeckClockPlugin />,
+    title: "Sincere Clock",
+    content: <SincereClockPlugin />,
     icon: <FaRegClock />,
     onDismount() {
       // Plugin cleanup code
