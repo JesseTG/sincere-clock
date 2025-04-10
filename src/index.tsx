@@ -1,11 +1,12 @@
-import React from "react";
-import { definePlugin } from "decky-frontend-lib";
+import { definePlugin, ServerAPI, Plugin } from "decky-frontend-lib";
 import { FaRegClock } from "react-icons/fa";
 import {SincereClockPlugin} from "./plugin";
+import {staticClasses} from "@decky/ui";
 
-export default definePlugin(() => {
+// noinspection JSUnusedGlobalSymbols
+export default definePlugin((_serverAPI: ServerAPI): Plugin => {
   return {
-    title: "Sincere Clock",
+    title: <div className={staticClasses.Title}>Sincere Clock</div>,
     content: <SincereClockPlugin />,
     icon: <FaRegClock />,
     onDismount() {
