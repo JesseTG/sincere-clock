@@ -1,5 +1,4 @@
 import deckyPlugin from "@decky/rollup";
 
-export default deckyPlugin({
-    // Add your extra Rollup options here
-})
+// noinspection JSUnusedGlobalSymbols
+export default [deckyPlugin({})];
