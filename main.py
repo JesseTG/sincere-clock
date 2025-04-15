@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 
 import os
-import sys
 import time
-import asyncio
 import logging
 from logging.handlers import RotatingFileHandler
-from pathlib import Path
 
 # Setup logger
 log_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "logs")
@@ -89,23 +86,6 @@ class Plugin:
             logger.error(f"Error getting time data: {str(e)}")
             return {"success": False, "error": str(e)}
 
-# Decky plugin entrypoint
-async def main():
-    plugin = Plugin()
-    logger.info("Plugin started")
-    
-    # Update boot time on startup
-    boot_data = await Plugin.get_boot_time()
-    if boot_data["success"]:
-        plugin.boot_time = boot_data["boot_time"]
-
-    # Keep the plugin running
-    while True:
-        await asyncio.sleep(1)
 
 if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except Exception as e:
-        logger.error(f"Plugin crashed: {str(e)}")
-        sys.exit(1)
+    raise RuntimeError("This script is a backend for a Decky plugin, and is not meant to be run directly.")
