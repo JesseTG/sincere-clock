@@ -2,6 +2,7 @@
   "name": "sincere-clock",
   "version": "0.0.1",
   "description": "A Decky plugin that displays the time since your game was launched.",
+  "packageManager": "pnpm@10.8.1",
   "type": "module",
   "scripts": {
     "build": "rollup -c",
