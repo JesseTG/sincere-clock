@@ -71,23 +71,3 @@ export const SincereClockPlugin: React.FC = () => {
     </PanelSection>
   );
 };
-
-// Server Plugin
-export class Plugin {
-  private serverAPI: ServerAPI;
-
-  constructor(serverAPI: ServerAPI) {
-    this.serverAPI = serverAPI;
-  }
-
-  async register() {
-    // Register plugin backend features here
-    return {
-      success: true
-    };
-  }
-
-  async unregister() {
-    // Clean up plugin backend features here
-  }
-}
