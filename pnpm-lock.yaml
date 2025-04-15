@@ -11,6 +11,12 @@ importers:
       '@decky/api':
         specifier: ^1.1.2
         version: 1.1.2
+      cotton-box:
+        specifier: ^0.6.0
+        version: 0.6.0
+      cotton-box-react:
+        specifier: ^0.6.0
+        version: 0.6.0(@types/react@18.3.3)(cotton-box@0.6.0)
       decky-frontend-lib:
         specifier: ^3.25.0
         version: 3.25.0
@@ -429,6 +435,18 @@ packages:
 
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
+
+  cotton-box-react@0.6.0:
+    resolution: {integrity: sha512-Vj1bEviENv35pttjIWmnCSTOIzfFDlqFXNlI15KxbHXXcmPktmNdCvZYOtZnrlW5bxNNan5EBdSYWLfbpLYSfw==}
+    peerDependencies:
+      '@types/react': '*'
+      cotton-box: '*'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
+  cotton-box@0.6.0:
+    resolution: {integrity: sha512-BU24aMOYfyJxWxYEENyAgChOWwPdGdihBhkuv0R/afH6UB9LnnFFDTcMamzd+gftveBThx/B5P38KClDyhJ59Q==}
 
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
@@ -1309,6 +1327,14 @@ snapshots:
   commondir@1.0.1: {}
 
   concat-map@0.0.1: {}
+
+  cotton-box-react@0.6.0(@types/react@18.3.3)(cotton-box@0.6.0):
+    dependencies:
+      cotton-box: 0.6.0
+    optionalDependencies:
+      '@types/react': 18.3.3
+
+  cotton-box@0.6.0: {}
 
   cross-spawn@7.0.6:
     dependencies:
