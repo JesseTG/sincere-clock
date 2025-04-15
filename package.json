@@ -7,7 +7,8 @@
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "zip": "zip ./out/sincere-clock.zip dist py_modules main.py package.json plugin.json README.md"
   },
   "repository": {
     "type": "git",
