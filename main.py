@@ -1,50 +1,27 @@
 #!/usr/bin/env python3
 
-import os
 import time
-import logging
-from logging.handlers import RotatingFileHandler
+from typing import TypedDict
+from decky import logger
 
-# Setup logger
-log_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "logs")
-os.makedirs(log_dir, exist_ok=True)
-log_file = os.path.join(log_dir, "decky_deck_clock.log")
-
-logger = logging.getLogger("decky_deck_clock")
-logger.setLevel(logging.INFO)
-
-handler = RotatingFileHandler(
-    log_file,
-    maxBytes=1024 * 1024,  # 1MB
-    backupCount=3,
-    encoding="utf-8"
-)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+class Times(TypedDict):
+    """Type for time tracking data"""
+    boot_time: float
+    wake_time: float
+    steam_start_time: float
 
 class Plugin:
-    """
-    Decky Deck Clock Plugin Backend
 
-    This handles any backend logic for the clock widget
-    """
+    async def _main(self):
+        logger.info("Plugin started")
+        pass
 
-    # Singleton plugin instance
-    __instance = None
+    # Function used to clean up a plugin when it's told to unload by Decky-Loader
+    async def _unload(self):
+        logger.info("Plugin unloaded")
+        pass
 
-    def __init__(self):
-        if Plugin.__instance is not None:
-            raise Exception("Plugin class is a singleton!")
-
-        Plugin.__instance = self
-        self.boot_time = time.time()
-        self.wake_time = time.time()
-        self.steam_start_time = time.time()
-        logger.info("Plugin initialized")
-
-    @staticmethod
-    async def get_boot_time():
+    async def get_time_since_boot(self):
         """Get the system boot time"""
         try:
             # This works on Linux systems
@@ -57,34 +34,27 @@ class Plugin:
             logger.error(f"Error getting boot time: {str(e)}")
             return {"success": False, "error": str(e)}
 
-    @staticmethod
-    async def set_wake_time():
-        """Update the wake time (called when system wakes from sleep)"""
-        try:
-            if Plugin.__instance:
-                Plugin.__instance.wake_time = time.time()
-                logger.info("Wake time updated")
-            return {"success": True}
-        except Exception as e:
-            logger.error(f"Error setting wake time: {str(e)}")
-            return {"success": False, "error": str(e)}
+    async def get_time_since_game_start(self):
+        pass
 
-    @staticmethod
-    async def get_time_data():
+    async def get_time_since_steam_start(self):
+        pass
+
+    async def get_time_since_wake(self):
+        pass
+
+    async def get_time_since_plugin_start(self):
+        pass
+
+    async def get_time_data(self) -> Times:
         """Get all time tracking data"""
-        try:
-            if not Plugin.__instance:
-                return {"success": False, "error": "Plugin not initialized"}
+        return Times(
+            boot_time=Plugin.__instance.boot_time,
+            wake_time=Plugin.__instance.wake_time,
+            steam_start_time=Plugin.__instance.steam_start_time
+        )
 
-            return {
-                "success": True,
-                "boot_time": Plugin.__instance.boot_time,
-                "wake_time": Plugin.__instance.wake_time,
-                "steam_start_time": Plugin.__instance.steam_start_time
-            }
-        except Exception as e:
-            logger.error(f"Error getting time data: {str(e)}")
-            return {"success": False, "error": str(e)}
+
 
 
 if __name__ == "__main__":
