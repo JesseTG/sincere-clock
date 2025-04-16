@@ -1,5 +1,5 @@
 {
-  "name": "Sincere Clock",
+  "name": "sincere-clock",
   "author": "Jesse Talavera",
   "flags": ["debug", "_root"],
   "api_version": 1,
