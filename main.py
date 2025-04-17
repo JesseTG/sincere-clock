@@ -25,18 +25,10 @@ class Times(TypedDict):
 class Plugin:
     def __init__(self):
         logger.debug("Initializing Sincere Clock")
-        self._plugin_start_time: datetime = datetime.now(UTC)
-
-    async def _main(self):
         logger.debug(f"Python version {sys.version}")
         logger.debug(f"ppid: {os.getppid()}")
         logger.info("Plugin started")
-        pass
-
-    # Function used to clean up a plugin when it's told to unload by Decky-Loader
-    async def _unload(self):
-        logger.info("Plugin unloaded")
-        pass
+        self._plugin_start_time: datetime = datetime.now(UTC)
 
     def _get_boot_time(self):
         # TODO: Check /proc/stat
