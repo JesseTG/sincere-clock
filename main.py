@@ -48,6 +48,11 @@ class Plugin:
 
     def _get_steam_start_time(self):
         # TODO: Get the time that Steam started
+        # TODO: Open "~/.steampid"
+        # TODO: Open "/home/deck/.steam/steam.pid" if the first one doesn't exist
+        # TODO: Read the file to get the PID of Steam
+        # TODO: Ensure that the PID still exists
+        # TODO: Read /proc/<pid>/stat to get the start time
         return 0
 
     def _get_last_wake_time(self):
