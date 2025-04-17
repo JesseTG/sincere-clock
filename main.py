@@ -3,7 +3,7 @@ import logging
 import sys
 import os
 import datetime
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import TypedDict, Optional
 import decky
 from decky import logger
@@ -25,7 +25,7 @@ class Times(TypedDict):
 class Plugin:
     def __init__(self):
         logger.debug("Initializing Sincere Clock")
-        self._plugin_start_time: datetime = datetime.now(datetime.UTC)
+        self._plugin_start_time: datetime = datetime.now(UTC)
 
     async def _main(self):
         logger.debug(f"Python version {sys.version}")
