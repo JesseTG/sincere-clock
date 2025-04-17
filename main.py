@@ -12,7 +12,7 @@ from settings import SettingsManager
 # Setup backend logger
 logger.setLevel(logging.DEBUG)
 logger.info("[backend] Settings path: {}".format(decky.DECKY_PLUGIN_SETTINGS_DIR))
-settings = SettingsManager(name="settings", settings_directory=(decky.DECKY_PLUGIN_SETTINGS_DIR))
+settings = SettingsManager(name="settings", settings_directory=decky.DECKY_PLUGIN_SETTINGS_DIR)
 settings.read()
 
 class Times(TypedDict):
