@@ -5,7 +5,7 @@ import {routerHook} from "@decky/api";
 import {GlobalComponentName} from "./constants";
 import {StateManager} from "cotton-box";
 import {PluginContext, State} from "./state";
-import ClockOverlay from "./components/ClockOverlay";
+import SincereClockOverlay from "./components/SincereClockOverlay";
 import {SincereClockSettings} from "./components/SincereClockSettings";
 
 // noinspection JSUnusedGlobalSymbols
@@ -20,7 +20,7 @@ export default definePlugin((_serverAPI: ServerAPI): Plugin => {
     routerHook.addGlobalComponent(GlobalComponentName, () => {
         return (
             <PluginContext.Provider value={state}>
-                <b style={{"color": "red"}}>Hello!</b>;
+                <SincereClockOverlay/>
             </PluginContext.Provider>
         );
     });
