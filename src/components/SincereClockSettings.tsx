@@ -4,10 +4,10 @@ import {
   PanelSectionRow
 } from "decky-frontend-lib";
 import { useEffect, useState } from "react";
-import { ClockWidget } from "./components/ClockWidget";
+import { ClockWidget } from "./ClockWidget";
 
 // Main Plugin Component
-export function SincereClockPlugin() {
+export function SincereClockSettings() {
   // Application state
   const [isGameRunning, setIsGameRunning] = useState<boolean>(false);
   const [currentGameStartTime, setCurrentGameStartTime] = useState<Date | null>(null);

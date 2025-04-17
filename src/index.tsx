@@ -1,11 +1,12 @@
 import {definePlugin, ServerAPI, Plugin} from "decky-frontend-lib";
 import {FaStopwatch} from "react-icons/fa6";
-import {SincereClockPlugin} from "./plugin";
 import {staticClasses} from "@decky/ui";
 import {routerHook} from "@decky/api";
 import {GlobalComponentName} from "./constants";
 import {StateManager} from "cotton-box";
 import {PluginContext, State} from "./state";
+import ClockOverlay from "./components/ClockOverlay";
+import {SincereClockSettings} from "./components/SincereClockSettings";
 
 // noinspection JSUnusedGlobalSymbols
 export default definePlugin((_serverAPI: ServerAPI): Plugin => {
@@ -28,8 +29,7 @@ export default definePlugin((_serverAPI: ServerAPI): Plugin => {
         title: <div className={staticClasses.Title}>Sincere Clock</div>,
         content:
             <PluginContext.Provider value={state}>
-                <b style={{"color": "blue"}}>France</b>;
-                <SincereClockPlugin/>
+                <SincereClockSettings/>
             </PluginContext.Provider>,
         icon: <FaStopwatch/>,
         onDismount() {
