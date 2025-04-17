@@ -1,0 +1,28 @@
+import { call } from '@decky/api';
+
+export interface StartTimes {
+    bootTime: Date,
+    gameStartTime: Date | null,
+    lastWakeTime: Date,
+    pluginStartTime: Date,
+    steamStartTime: Date,
+}
+
+type StartTimesResponse = {
+    boot_time: number,
+    game_start_time: number | null,
+    last_wake_time: number,
+    plugin_start_time: number,
+    steam_start_time: number,
+}
+
+export async function getStartTimes(): Promise<StartTimes> {
+    const times = await call<[], StartTimesResponse>('get_start_times');
+    return {
+        bootTime: new Date(times.boot_time),
+        gameStartTime: times.game_start_time ? new Date(times.game_start_time) : null,
+        lastWakeTime: new Date(times.last_wake_time),
+        pluginStartTime: new Date(times.plugin_start_time),
+        steamStartTime: new Date(times.steam_start_time),
+    };
+}
