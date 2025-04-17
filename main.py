@@ -1,18 +1,35 @@
 #!/usr/bin/env python3
-
-import time
-from typing import TypedDict
+import logging
+import sys
+import os
+import datetime
+from datetime import datetime
+from typing import TypedDict, Optional
+import decky
 from decky import logger
+from settings import SettingsManager
+
+# Setup backend logger
+logger.setLevel(logging.DEBUG)
+logger.info("[backend] Settings path: {}".format(decky.DECKY_PLUGIN_SETTINGS_DIR))
+settings = SettingsManager(name="settings", settings_directory=(decky.DECKY_PLUGIN_SETTINGS_DIR))
+settings.read()
 
 class Times(TypedDict):
-    """Type for time tracking data"""
-    boot_time: float
-    wake_time: float
-    steam_start_time: float
+    boot_time: int
+    game_start_time: Optional[int]
+    steam_start_time: int
+    last_wake_time: int
+    plugin_start_time: int
 
 class Plugin:
+    def __init__(self):
+        logger.debug("Initializing Sincere Clock")
+        self._plugin_start_time: datetime = datetime.now(datetime.UTC)
 
     async def _main(self):
+        logger.debug(f"Python version {sys.version}")
+        logger.debug(f"ppid: {os.getppid()}")
         logger.info("Plugin started")
         pass
 
@@ -21,40 +38,31 @@ class Plugin:
         logger.info("Plugin unloaded")
         pass
 
-    async def get_time_since_boot(self):
-        """Get the system boot time"""
-        try:
-            # This works on Linux systems
-            with open('/proc/uptime', 'r') as f:
-                uptime_seconds = float(f.readline().split()[0])
+    def _get_boot_time(self):
+        # TODO: Check /proc/stat
+        return 0
 
-            boot_time = time.time() - uptime_seconds
-            return {"success": True, "boot_time": boot_time}
-        except Exception as e:
-            logger.error(f"Error getting boot time: {str(e)}")
-            return {"success": False, "error": str(e)}
+    def _get_game_start_time(self):
+        # TODO: Get the time that the current game started
+        return None
 
-    async def get_time_since_game_start(self):
-        pass
+    def _get_steam_start_time(self):
+        # TODO: Get the time that Steam started
+        return 0
 
-    async def get_time_since_steam_start(self):
-        pass
+    def _get_last_wake_time(self):
+        # TODO: Figure out how to tell when the Deck was last woken up
+        return 0
 
-    async def get_time_since_wake(self):
-        pass
-
-    async def get_time_since_plugin_start(self):
-        pass
-
-    async def get_time_data(self) -> Times:
+    async def get_start_times(self) -> Times:
         """Get all time tracking data"""
         return Times(
-            boot_time=Plugin.__instance.boot_time,
-            wake_time=Plugin.__instance.wake_time,
-            steam_start_time=Plugin.__instance.steam_start_time
+            plugin_start_time=int(self._plugin_start_time.timestamp() * 1000),
+            boot_time=self._get_boot_time(),
+            game_start_time=self._get_game_start_time(),
+            steam_start_time=self._get_steam_start_time(),
+            last_wake_time=self._get_last_wake_time(),
         )
-
-
 
 
 if __name__ == "__main__":
