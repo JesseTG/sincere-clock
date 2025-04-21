@@ -5,7 +5,6 @@ import subprocess
 import sys
 import os
 import datetime
-from datetime import datetime
 from typing import TypedDict, Optional
 import decky
 from decky import logger
@@ -126,7 +125,7 @@ class Plugin:
         logger.debug(f"Python version {sys.version}")
         logger.debug(f"ppid: {os.getppid()}")
         logger.info("Plugin started")
-        self._plugin_start_time: datetime = datetime.now(datetime.timezone.utc)
+        self._plugin_start_time: datetime = datetime.datetime.now(datetime.timezone.utc)
 
     def _get_last_wake_time(self):
         # TODO: Figure out how to tell when the Deck was last woken up
