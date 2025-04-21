@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 import logging
+import subprocess
+
 import sys
 import os
 import datetime
-from datetime import datetime, UTC
+from datetime import datetime
 from typing import TypedDict, Optional
 import decky
 from decky import logger
@@ -23,36 +25,67 @@ class Times(TypedDict):
     plugin_start_time: int
 
 
-def get_steam_start_time():
+def get_game_pid() -> int | None:
     try:
-        # Open "~/.steampid"
-        steam_pid_path = os.path.expanduser("~/.steampid")
-        # Open "/home/deck/.steam/steam.pid" if the first one doesn't exist
-        if not os.path.exists(steam_pid_path):
-            steam_pid_path = "/home/deck/.steam/steam.pid"
+        with subprocess.run(["pgrep", "--full", "--oldest", f"/reaper\\s.*\\bAppId=\\d+\\b"], stdout=subprocess.PIPE) as p:
+            pid = p.stdout.read().strip()
 
-        if not os.path.exists(steam_pid_path):
-            logger.warning(f"Steam PID file not found at {steam_pid_path}")
-            return 0
+        if pid:
+            return int(pid)
+    except ValueError:
+        # No game is running, this is normal
+        return None
+    except subprocess.SubprocessError as e:
+        logger.error(f"Error getting game PID: {e}")
 
-        # Read the file to get the PID of Steam
-        with open(steam_pid_path, 'r') as f:
-            steam_pid = int(f.read().strip())
+    return None
 
-        # Ensure that the PID still exists
-        if not os.path.exists(f"/proc/{steam_pid}"):
-            logger.warning(f"Steam process with PID {steam_pid} not found")
-            return 0
+def get_steam_pid() -> Optional[int]:
+    # Open "~/.steampid"
+    steam_pid_path = os.path.expanduser("~/.steampid")
 
+    # Open "/home/deck/.steam/steam.pid" if the first one doesn't exist
+    if not os.path.exists(steam_pid_path):
+        steam_pid_path = "/home/deck/.steam/steam.pid"
+
+    if not os.path.exists(steam_pid_path):
+        logger.warning(f"Steam PID file not found at {steam_pid_path}")
+        return None
+
+    # Read the file to get the PID of Steam
+    with open(steam_pid_path, 'r') as f:
+        steam_pid = int(f.read().strip())
+
+    # Ensure that the PID still exists
+    if not os.path.exists(f"/proc/{steam_pid}"):
+        logger.warning(f"Steam process with PID {steam_pid} not found")
+        return None
+
+    return steam_pid
+
+def get_boot_time():
+    # Read the kernel/system stats from /proc/stat
+    with open("/proc/stat", 'r') as f:
+        for line in f:
+            if line.startswith("btime "):
+                boot_time_secs = int(line.split()[1])
+                # Convert to milliseconds
+                return boot_time_secs * 1000
+        else:
+            logger.warning("Could not find boot time in /proc/stat")
+            return None
+
+def get_process_start_time(pid: int) -> Optional[int]:
+    try:
         # Read /proc/<pid>/stat
-        with open(f"/proc/{steam_pid}/stat", 'r') as f:
+        with open(f"/proc/{pid}/stat", 'r') as f:
             stat_data = f.read().strip()
 
         # Parse stat data (handling command with spaces in parentheses)
         stat_parts = stat_data.split(')')
         if len(stat_parts) < 2:
-            logger.warning(f"Invalid stat data format for PID {steam_pid}")
-            return 0
+            logger.warning(f"Invalid stat data format for PID {pid}")
+            return None
 
         stat_values = stat_parts[1].strip().split()
 
@@ -65,7 +98,7 @@ def get_steam_start_time():
 
         if clock_ticks <= 0:
             logger.warning("Invalid clock ticks value: {}".format(clock_ticks))
-            return 0
+            return None
 
         # Get system boot time
         with open("/proc/stat", 'r') as f:
@@ -75,7 +108,7 @@ def get_steam_start_time():
                     break
             else:
                 logger.warning("Could not find boot time in /proc/stat")
-                return 0
+                return None
 
         # Convert the "starttime" field from clock ticks to milliseconds since epoch
         start_time_secs = boot_time_secs + (start_time_ticks / clock_ticks)
@@ -84,9 +117,8 @@ def get_steam_start_time():
         return start_time_ms
 
     except Exception as e:
-        logger.error(f"Error getting Steam start time: {e}")
-        return 0
-
+        logger.error(f"Error getting process start time: {e}")
+        return None
 
 class Plugin:
     def __init__(self):
@@ -94,15 +126,7 @@ class Plugin:
         logger.debug(f"Python version {sys.version}")
         logger.debug(f"ppid: {os.getppid()}")
         logger.info("Plugin started")
-        self._plugin_start_time: datetime = datetime.now(UTC)
-
-    def _get_boot_time(self):
-        # TODO: Check /proc/stat
-        return 0
-
-    def _get_game_start_time(self):
-        # TODO: Get the time that the current game started
-        return None
+        self._plugin_start_time: datetime = datetime.now(datetime.timezone.utc)
 
     def _get_last_wake_time(self):
         # TODO: Figure out how to tell when the Deck was last woken up
@@ -110,11 +134,14 @@ class Plugin:
 
     async def get_start_times(self) -> Times:
         """Get all time tracking data"""
+        game_pid = get_game_pid()
+        steam_pid = get_steam_pid()
+
         return Times(
             plugin_start_time=int(self._plugin_start_time.timestamp() * 1000),
-            boot_time=self._get_boot_time(),
-            game_start_time=self._get_game_start_time(),
-            steam_start_time=get_steam_start_time(),
+            boot_time=get_boot_time(),
+            game_start_time=get_process_start_time(game_pid) if game_pid else None,
+            steam_start_time=get_process_start_time(steam_pid),
             last_wake_time=self._get_last_wake_time(),
         )
 
