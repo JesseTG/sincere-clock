@@ -11,6 +11,9 @@ importers:
       '@decky/api':
         specifier: ^1.1.2
         version: 1.1.2
+      '@rollup/rollup-linux-x64-gnu':
+        specifier: ^4.40.0
+        version: 4.40.0
       cotton-box:
         specifier: ^0.6.0
         version: 0.6.0
@@ -48,6 +51,9 @@ importers:
       rollup:
         specifier: ^4.22.5
         version: 4.40.0
+      steam-types:
+        specifier: ^0.1.2
+        version: 0.1.2(@types/react@18.3.3)
       typescript:
         specifier: ^5.6.2
         version: 5.8.3
@@ -282,6 +288,11 @@ packages:
 
   '@types/react-dom@18.3.0':
     resolution: {integrity: sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==}
+
+  '@types/react-dom@19.1.2':
+    resolution: {integrity: sha512-XGJkWF41Qq305SKWEILa1O8vzhb3aOo3ogBlSmiqNko/WmRb6QIaweuZCXjKygVDXpzXb5wyxKTSOsmkuqj+Qw==}
+    peerDependencies:
+      '@types/react': ^19.0.0
 
   '@types/react@18.3.3':
     resolution: {integrity: sha512-hti/R0pS0q1/xx+TsI73XIqk26eBsISZ2R0wUijXIngRK9R/e7Xw/cXVxQK7R5JjW+SV4zGcn5hXjudkN/pLIw==}
@@ -660,6 +671,9 @@ packages:
     resolution: {integrity: sha512-3R/1M+yS3j5ou80Me59j7F9IMs4PXs3VqRrm0TU3AbKPxlmpoY1TNscJV/oGJXo8qCatFGTfDbY6W6ipGOYXfg==}
     engines: {node: '>=6.11.5'}
 
+  long@5.3.2:
+    resolution: {integrity: sha512-mNAgZ1GmyNhD7AuqnTG3/VQ26o760+ZYBPKjPvugO8+nLbYfX6TVpJPseBvopbdY+qpZ/lKUnmEc1LeZYS3QAA==}
+
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
 
@@ -699,6 +713,9 @@ packages:
   minipass@7.1.2:
     resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
     engines: {node: '>=16 || 14 >=14.17'}
+
+  mobx@6.13.7:
+    resolution: {integrity: sha512-aChaVU/DO5aRPmk1GX8L+whocagUUpBQqoPtJk+cm7UOXUk87J4PeWCh6nNmTTIfEhiR9DI/+FnA8dln/hTK7g==}
 
   neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
@@ -843,6 +860,9 @@ packages:
   source-map@0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
+
+  steam-types@0.1.2:
+    resolution: {integrity: sha512-o78iORTEBxXeC0lPYwgwvkFz9rlXLy206WP0K0k5SSoZL7y1B/3T30FVoSTsuth5ImPZ+Z3udw4TuXc+NbgxNA==}
 
   string-width@4.2.3:
     resolution: {integrity: sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==}
@@ -1114,8 +1134,7 @@ snapshots:
   '@rollup/rollup-linux-s390x-gnu@4.40.0':
     optional: true
 
-  '@rollup/rollup-linux-x64-gnu@4.40.0':
-    optional: true
+  '@rollup/rollup-linux-x64-gnu@4.40.0': {}
 
   '@rollup/rollup-linux-x64-musl@4.40.0':
     optional: true
@@ -1150,6 +1169,10 @@ snapshots:
   '@types/prop-types@15.7.14': {}
 
   '@types/react-dom@18.3.0':
+    dependencies:
+      '@types/react': 18.3.3
+
+  '@types/react-dom@19.1.2(@types/react@18.3.3)':
     dependencies:
       '@types/react': 18.3.3
 
@@ -1537,6 +1560,8 @@ snapshots:
 
   loader-runner@4.3.0: {}
 
+  long@5.3.2: {}
+
   lru-cache@10.4.3: {}
 
   magic-string@0.30.17:
@@ -1571,6 +1596,8 @@ snapshots:
       brace-expansion: 2.0.1
 
   minipass@7.1.2: {}
+
+  mobx@6.13.7: {}
 
   neo-async@2.6.2: {}
 
@@ -1715,6 +1742,14 @@ snapshots:
       source-map: 0.6.1
 
   source-map@0.6.1: {}
+
+  steam-types@0.1.2(@types/react@18.3.3):
+    dependencies:
+      '@types/react-dom': 19.1.2(@types/react@18.3.3)
+      long: 5.3.2
+      mobx: 6.13.7
+    transitivePeerDependencies:
+      - '@types/react'
 
   string-width@4.2.3:
     dependencies:

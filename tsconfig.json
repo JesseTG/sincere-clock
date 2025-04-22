@@ -17,6 +17,6 @@
     "strict": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src"],
+  "include": ["overrides.d.ts", "src"],
   "exclude": ["node_modules"]
 }
