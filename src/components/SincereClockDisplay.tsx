@@ -53,6 +53,6 @@ export default function SincereClockDisplay() {
     return state.enabled ? <SincereClockOverlay /> : null;
 
     // The overlay is in a separate component
-    // so that we don't have to call the useUIComposition hook conditionally
+    // because you can't call hooks conditionally within a component
     // MagicBlackDecky does the same thing
 }
