@@ -1,73 +1,22 @@
 import {
-  ServerAPI,
-  PanelSection,
-  PanelSectionRow
+    PanelSection,
+    PanelSectionRow
 } from "decky-frontend-lib";
-import { useEffect, useState } from "react";
-import { ClockWidget } from "./ClockWidget";
+import {ToggleField} from "@decky/ui";
+import {usePluginState} from "../state";
 
-// Main Plugin Component
 export function SincereClockSettings() {
-  // Application state
-  const [isGameRunning, setIsGameRunning] = useState<boolean>(false);
-  const [currentGameStartTime, setCurrentGameStartTime] = useState<Date | null>(null);
-  const [steamStartTime] = useState<Date>(new Date());
-  const [bootTime] = useState<Date>(new Date());
-  const [wakeTime, setWakeTime] = useState<Date>(new Date());
+    const [state, setState] = usePluginState();
 
-  useEffect(() => {
-    // Handle game session tracking
-    const checkGameStatus = () => {
-      // In a real implementation, this would use actual Steam APIs
-      // to check if a game is running and get the current game information
-      const gameRunning = (window as any).App?.GameSessions?.GetCurrentGameID() !== 0;
+    function handleToggleChange(checked: boolean) {
+        setState((prev) => ({...prev, enabled: checked}));
+    }
 
-      if (gameRunning && !isGameRunning) {
-        // Game just started
-        setCurrentGameStartTime(new Date());
-        setIsGameRunning(true);
-      } else if (!gameRunning && isGameRunning) {
-        // Game just ended
-        setIsGameRunning(false);
-        setCurrentGameStartTime(null);
-      }
-    };
-
-    // Setup sleep/wake event listeners
-    const handleWake = () => {
-      setWakeTime(new Date());
-    };
-
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible") {
-        handleWake();
-      }
-    });
-
-    // Check game status periodically
-    const interval = setInterval(checkGameStatus, 5000);
-
-    // Initial check
-    checkGameStatus();
-
-    // Cleanup
-    return () => {
-      clearInterval(interval);
-      document.removeEventListener("visibilitychange", handleWake);
-    };
-  }, [isGameRunning]);
-
-  return (
-    <PanelSection title="Deck Clock">
-      <PanelSectionRow>
-        <ClockWidget
-          isGameRunning={isGameRunning}
-          gameStartTime={currentGameStartTime}
-          steamStartTime={steamStartTime}
-          bootTime={bootTime}
-          wakeTime={wakeTime}
-        />
-      </PanelSectionRow>
-    </PanelSection>
-  );
+    return (
+        <PanelSection title="Sincere Clock">
+            <PanelSectionRow>
+                <ToggleField checked={state.enabled} onChange={handleToggleChange}/>
+            </PanelSectionRow>
+        </PanelSection>
+    );
 };

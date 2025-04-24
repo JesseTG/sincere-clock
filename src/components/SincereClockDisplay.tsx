@@ -1,9 +1,6 @@
-import {usePluginState} from "../state";
-import {
-    Router,
-    WindowRouter,
-    getGamepadNavigationTrees, findModuleChild,
+import {findModuleChild,
 } from "@decky/ui";
+import {State, StateSetter, usePluginState} from "../state";
 
 enum UIComposition {
     Hidden = 0,
@@ -30,8 +27,11 @@ const useUIComposition: (composition: UIComposition) => void = findModuleChild(
     }
 );
 
-export default function SincereClockOverlay() {
+function SincereClockOverlay() {
+    const [state, setState] = usePluginState();
+
     useUIComposition(UIComposition.Notification);
+
 
     return (
         <div style={{
@@ -42,6 +42,17 @@ export default function SincereClockOverlay() {
             zIndex: 7002,
             position: "fixed",
             pointerEvents: "none"
-        }} />
+        }}/>
     );
+}
+
+export default function SincereClockDisplay() {
+    const [state, setState] = usePluginState();
+
+    // Hide the overlay if we've turned it off
+    return state.enabled ? <SincereClockOverlay /> : null;
+
+    // The overlay is in a separate component
+    // so that we don't have to call the useUIComposition hook conditionally
+    // MagicBlackDecky does the same thing
 }
