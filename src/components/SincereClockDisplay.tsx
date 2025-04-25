@@ -13,7 +13,7 @@ enum UIComposition {
 const useUIComposition: (composition: UIComposition) => void = findModuleChild(
     (m) => {
         if (typeof m !== "object") return undefined;
-        for (let prop in m) {
+        for (const prop in m) {
             if (
                 typeof m[prop] === "function" &&
                 m[prop].toString().includes("AddMinimumCompositionStateRequest") &&
