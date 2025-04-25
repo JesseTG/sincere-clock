@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
+import asyncio
 import logging
 import subprocess
 
 import sys
 import os
 import datetime
-from typing import TypedDict, Optional
+from typing import Optional
 import decky
 from decky import logger
 from settings import SettingsManager
@@ -15,13 +16,6 @@ logger.setLevel(logging.DEBUG)
 logger.info("[backend] Settings path: {}".format(decky.DECKY_PLUGIN_SETTINGS_DIR))
 settings = SettingsManager(name="settings", settings_directory=decky.DECKY_PLUGIN_SETTINGS_DIR)
 settings.read()
-
-class Times(TypedDict):
-    boot_time: int
-    game_start_time: Optional[int]
-    steam_start_time: int
-    last_wake_time: int
-    plugin_start_time: int
 
 
 def get_game_pid() -> int | None:
@@ -126,23 +120,34 @@ class Plugin:
         logger.debug(f"ppid: {os.getppid()}")
         logger.info("Plugin started")
         self._plugin_start_time: datetime = datetime.datetime.now(datetime.timezone.utc)
+        self.loop = asyncio.get_event_loop()
 
-    def _get_last_wake_time(self):
-        # TODO: Figure out how to tell when the Deck was last woken up
-        return 0
+    async def _main(self):
+        pass
 
-    async def get_start_times(self) -> Times:
-        """Get all time tracking data"""
+    @staticmethod
+    async def get_boot_time() -> int:
+        """Get the boot time of the system"""
+        return get_boot_time()
+
+    @staticmethod
+    async def get_game_start_time() -> Optional[int]:
+        """Get the start time of the game"""
         game_pid = get_game_pid()
-        steam_pid = get_steam_pid()
+        if game_pid:
+            return get_process_start_time(game_pid)
+        # TODO: Is this needed, or can I get it on the frontend?
+        # TODO: I don't want to count time suspended
+        return None
 
-        return Times(
-            plugin_start_time=int(self._plugin_start_time.timestamp() * 1000),
-            boot_time=get_boot_time(),
-            game_start_time=get_process_start_time(game_pid) if game_pid else None,
-            steam_start_time=get_process_start_time(steam_pid),
-            last_wake_time=self._get_last_wake_time(),
-        )
+    @staticmethod
+    async def get_steam_start_time() -> Optional[int]:
+        """Get the start time of Steam"""
+        steam_pid = get_steam_pid()
+        if steam_pid:
+            return get_process_start_time(steam_pid)
+        # TODO: Is this needed, or can I get it on the frontend?
+        return None
 
 
 if __name__ == "__main__":
