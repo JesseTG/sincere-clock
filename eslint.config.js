@@ -7,17 +7,24 @@ import { defineConfig } from "eslint/config";
 
 export default defineConfig([
   {
-    files: ["src/*.{js,mjs,cjs,ts,jsx,tsx}"],
+    files: ["src/**.{js,mjs,cjs,ts,jsx,tsx}"],
+    ignores: ["node_modules/**", "dist/**"],
     plugins: { js },
     extends: [js.configs.recommended],
   },
   {
-    files: ["src/*.{js,mjs,cjs,ts,jsx,tsx}"],
+    files: ["src/**.{js,mjs,cjs,ts,jsx,tsx}"],
+    ignores: ["node_modules/**", "dist/**"],
     languageOptions: { globals: globals.browser }
   },
-  ...tseslint.configs.recommended,
   {
-    ...pluginReact.configs.flat.recommended,
+    extends: [tseslint.configs.recommended],
+    rules: {
+      "@typescript-eslint/no-unused-vars": "warn"
+    },
+  },
+  {
+    ...pluginReact.configs.flat['jsx-runtime'],
     plugins: {
       react: pluginReact,
     },
