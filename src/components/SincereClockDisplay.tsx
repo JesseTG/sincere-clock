@@ -1,6 +1,7 @@
 import {findModuleChild,
 } from "@decky/ui";
 import {State, StateSetter, usePluginState} from "../state";
+import {useEffect} from "react";
 
 enum UIComposition {
     Hidden = 0,
@@ -32,6 +33,15 @@ function SincereClockOverlay() {
 
     useUIComposition(UIComposition.Notification);
 
+    // Force update every second
+    useEffect(() => {
+        const updateInterval = setInterval(() => {
+            // Force a re-render by setting a new object (even if its values are the same)
+            setState(prev => ({...prev}));
+        }, 1000);
+
+        return () => clearInterval(updateInterval);
+    }, [setState]);
 
     return (
         <div style={{
