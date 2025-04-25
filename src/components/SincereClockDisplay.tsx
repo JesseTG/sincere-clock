@@ -1,7 +1,7 @@
 import {findModuleChild,
 } from "@decky/ui";
 import {State, StateSetter, usePluginState} from "../state";
-import {useEffect} from "react";
+import {CSSProperties, useEffect} from "react";
 
 enum UIComposition {
     Hidden = 0,
@@ -33,26 +33,32 @@ function SincereClockOverlay() {
 
     useUIComposition(UIComposition.Notification);
 
-    // Force update every second
+    // Force update every half-second (to keep the display a little more consistent)
     useEffect(() => {
         const updateInterval = setInterval(() => {
             // Force a re-render by setting a new object (even if its values are the same)
             setState(prev => ({...prev}));
-        }, 1000);
+        }, 500);
 
         return () => clearInterval(updateInterval);
     }, [setState]);
 
+    const now = new Date(); // TODO: Get the time from one of the Python backend functions
+    const style: CSSProperties = {
+        width: "20vw",
+        height: "fit-content",
+        background: "green",
+        opacity: 0.7,
+        zIndex: 6000, // Less than MagicBlackDecky's z-value of 7002, so that'll be on top
+        position: "fixed",
+        pointerEvents: "none",
+        padding: 0,
+    };
+
     return (
-        <div style={{
-            height: "1em",
-            width: "5vw",
-            background: "green",
-            opacity: 0.7,
-            zIndex: 7002,
-            position: "fixed",
-            pointerEvents: "none"
-        }}/>
+        <div style={style}>
+            {now.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false})}
+        </div>
     );
 }
 
