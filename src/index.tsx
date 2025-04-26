@@ -28,7 +28,7 @@ export default definePlugin((_serverAPI: ServerAPI): Plugin => {
     const suspendRegistration = SteamClient.System.RegisterForOnSuspendRequest(() => {
         const now = new Date();
         console.debug("[SincereClock] Suspending at", now);
-        state.set(prev => ({...prev, lastBootTime: now}));
+        state.set(prev => ({...prev, lastSleepTime: now}));
     });
 
     const wakeRegistration = SteamClient.System.RegisterForOnResumeFromSuspend(() => {
