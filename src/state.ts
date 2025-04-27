@@ -1,6 +1,15 @@
 import {StateManager} from 'cotton-box'
 import {useContext, createContext, Dispatch, SetStateAction} from 'react';
 import {useStateValue} from "cotton-box-react";
+import {
+    DEFAULT_FONT_SIZE,
+    DEFAULT_FONT_COLOR,
+    DEFAULT_BACKGROUND_COLOR,
+    DEFAULT_POSITION,
+    CLOCK_POSITIONS
+} from './constants';
+
+export type ClockPosition = typeof CLOCK_POSITIONS[keyof typeof CLOCK_POSITIONS];
 
 export class State {
     public readonly steamStartTime: Date | null = null;
@@ -9,6 +18,12 @@ export class State {
     public readonly gameStartTime: Date | null = null;
     public readonly lastSleepTime: Date | null = null;
     public readonly enabled: boolean = true;
+
+    // Clock customization options
+    public readonly fontSize: number = DEFAULT_FONT_SIZE;
+    public readonly fontColor: string = DEFAULT_FONT_COLOR;
+    public readonly backgroundColor: string = DEFAULT_BACKGROUND_COLOR;
+    public readonly position: ClockPosition = DEFAULT_POSITION;
 }
 
 export type StateSetter<T> = Dispatch<SetStateAction<T>>;

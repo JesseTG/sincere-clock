@@ -1,7 +1,13 @@
 import {findModuleChild,
 } from "@decky/ui";
-import {State, StateSetter, usePluginState} from "../state";
+import {State, StateSetter, usePluginState, ClockPosition} from "../state";
 import {CSSProperties, useEffect} from "react";
+import {
+    CLOCK_PADDING,
+    CLOCK_BORDER_RADIUS,
+    CLOCK_Z_INDEX,
+    POSITION_OFFSET
+} from "../constants";
 
 enum UIComposition {
     Hidden = 0,
@@ -28,6 +34,25 @@ const useUIComposition: (composition: UIComposition) => void = findModuleChild(
     }
 );
 
+function getPositionStyle(position: ClockPosition): CSSProperties {
+    switch (position) {
+        case 'top-left':
+            return { top: POSITION_OFFSET, left: POSITION_OFFSET };
+        case 'top-center':
+            return { top: POSITION_OFFSET, left: '50%', transform: 'translateX(-50%)' };
+        case 'top-right':
+            return { top: POSITION_OFFSET, right: POSITION_OFFSET };
+        case 'bottom-left':
+            return { bottom: POSITION_OFFSET, left: POSITION_OFFSET };
+        case 'bottom-center':
+            return { bottom: POSITION_OFFSET, left: '50%', transform: 'translateX(-50%)' };
+        case 'bottom-right':
+            return { bottom: POSITION_OFFSET, right: POSITION_OFFSET };
+        default:
+            return { top: POSITION_OFFSET, right: POSITION_OFFSET };
+    }
+}
+
 function SincereClockOverlay() {
     const [state, setState] = usePluginState();
 
@@ -44,15 +69,20 @@ function SincereClockOverlay() {
     }, [setState]);
 
     const now = new Date(); // TODO: Get the time from one of the Python backend functions
+    const positionStyle = getPositionStyle(state.position);
+
     const style: CSSProperties = {
         width: "20vw",
         height: "fit-content",
-        background: "green",
-        opacity: 0.7,
-        zIndex: 6000, // Less than MagicBlackDecky's z-value of 7002, so that'll be on top
+        background: state.backgroundColor,
+        color: state.fontColor,
+        fontSize: `${state.fontSize}px`,
+        zIndex: CLOCK_Z_INDEX, // Less than MagicBlackDecky's z-value of 7002, so that'll be on top
         position: "fixed",
         pointerEvents: "none",
-        padding: 0,
+        padding: CLOCK_PADDING,
+        borderRadius: CLOCK_BORDER_RADIUS,
+        ...positionStyle
     };
 
     return (
