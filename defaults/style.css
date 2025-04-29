@@ -3,6 +3,11 @@
     --sincere-clock-swatch-size: 24px;
 }
 
+@font-face {
+    font-family: "Digital Dismay";
+    src: url("http://127.0.0.1:1337/plugins/sincere-clock/assets/font/Digital Dismay.otf") format("opentype");
+}
+
 #sincere-clock-settings .color-picker-swatch {
     width: var(--sincere-clock-swatch-size);
     height: var(--sincere-clock-swatch-size);
@@ -19,6 +24,7 @@
     z-index: 6000; /* Less than MagicBlackDecky's z-value of 7002, so that'll be on top */
     padding: 5px 10px;
     border-radius: 4px;
+    font-family: "Digital Dismay", monospace;
 }
 
 /* Position classes */

@@ -105,7 +105,7 @@ export function SincereClockSettings() {
                         <div className={"color-picker-swatch"}
                              style={{
                                  ...swatchPreviewStyle,
-                                 backgroundColor: state.fontColor.hexa(),
+                                 backgroundColor: state.fontColor.toString(),
                              }}
                         />
                     </Field>
@@ -116,7 +116,7 @@ export function SincereClockSettings() {
                         <div className={"color-picker-swatch"}
                              style={{
                                  ...swatchPreviewStyle,
-                                 backgroundColor: state.backgroundColor.hexa(),
+                                 backgroundColor: state.backgroundColor.toString(),
                              }}
                         />
                     </Field>
@@ -133,4 +133,4 @@ export function SincereClockSettings() {
             </PanelSection>
         </div>
     );
-};
+}

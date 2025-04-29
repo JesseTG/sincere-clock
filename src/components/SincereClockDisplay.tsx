@@ -51,8 +51,8 @@ function SincereClockOverlay() {
     const positionClass = getPositionClass(state.position);
 
     const dynamicStyle: CSSProperties = {
-        backgroundColor: state.backgroundColor,
-        color: state.fontColor,
+        backgroundColor: state.backgroundColor.toString(),
+        color: state.fontColor.toString(),
         fontSize: `${state.fontSize}px`,
     };
 
@@ -64,6 +64,7 @@ function SincereClockOverlay() {
         >
             {now.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit", second: "2-digit"})}
         </div>
+        // TODO: Use Intl.DateTimeFormat to internationalize the time display
     );
 }
 

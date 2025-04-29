@@ -3,8 +3,8 @@ export const GlobalComponentName = "SincereClock";
 
 // Clock display constants
 export const DEFAULT_FONT_SIZE = 24;
-export const DEFAULT_FONT_COLOR = Color("white");
-export const DEFAULT_BACKGROUND_COLOR = Color.rgb(0, 128, 0, 0.7);
+export const DEFAULT_FONT_COLOR = Color("#d14d4d"); // red
+export const DEFAULT_BACKGROUND_COLOR = Color.rgb("rgba(37,37,37,0.63)");
 
 export const CLOCK_POSITIONS = {
   TOP_LEFT: "top-left",
