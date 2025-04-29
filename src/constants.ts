@@ -14,7 +14,7 @@ export const CLOCK_POSITIONS = {
   BOTTOM_RIGHT: "bottom-right"
 } as const;
 
-export const DEFAULT_POSITION = CLOCK_POSITIONS.TOP_RIGHT;
+export const DEFAULT_POSITION = CLOCK_POSITIONS.TOP_LEFT;
 
 export const POSITION_OPTIONS = [
   { data: CLOCK_POSITIONS.TOP_LEFT, label: "Top Left" },
