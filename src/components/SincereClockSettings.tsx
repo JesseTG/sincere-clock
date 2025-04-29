@@ -1,9 +1,11 @@
 import {
     PanelSection,
     PanelSectionRow,
-    Dropdown
-} from "decky-frontend-lib";
-import {ToggleField, SliderField, ColorPickerModal} from "@decky/ui";
+    Dropdown,
+    ToggleField,
+    SliderField,
+    ColorPickerModal
+} from "@decky/ui";
 import {usePluginState, ClockPosition} from "../state";
 import {useState} from "react";
 import {
@@ -62,7 +64,7 @@ export function SincereClockSettings() {
             </PanelSectionRow>
 
             <PanelSectionRow>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                     <div>Font Color</div>
                     <div
                         onClick={() => setShowFontColorPicker(true)}
@@ -86,7 +88,7 @@ export function SincereClockSettings() {
             </PanelSectionRow>
 
             <PanelSectionRow>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                     <div>Background Color</div>
                     <div
                         onClick={() => setShowBgColorPicker(true)}

@@ -1,18 +1,18 @@
 import {SteamClient} from "steam-types";
-import {definePlugin, ServerAPI, Plugin, findSP} from "decky-frontend-lib";
 import {FaStopwatch} from "react-icons/fa6";
-import {staticClasses} from "@decky/ui";
-import {routerHook} from "@decky/api";
+import {staticClasses, findSP} from "@decky/ui";
+import {routerHook, definePlugin, Plugin} from "@decky/api";
 import {GlobalComponentName} from "./constants";
 import {PluginContext, State} from "./state";
 import SincereClockDisplay from "./components/SincereClockDisplay";
 import {SincereClockSettings} from "./components/SincereClockSettings";
 import {StateManager} from "cotton-box";
 
+import manifest from "../package.json" with { type: "json" };
 import styles from "../defaults/style.css";
 
 // noinspection JSUnusedGlobalSymbols
-export default definePlugin((_serverAPI: ServerAPI): Plugin => {
+export default definePlugin((): Plugin => {
     const state = new StateManager<State>(new State());
     const spWindow = findSP();
     const link = spWindow.document.createElement("link");
@@ -43,7 +43,9 @@ export default definePlugin((_serverAPI: ServerAPI): Plugin => {
     });
 
     return {
-        title: <div className={staticClasses.Title}>Sincere Clock</div>,
+        name: "Sincere Clock",
+        version: manifest.version,
+        titleView: <div className={staticClasses.Title}>Sincere Clock</div>,
         content:
             <PluginContext.Provider value={state}>
                 <SincereClockSettings/>

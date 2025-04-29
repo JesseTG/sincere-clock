@@ -17,6 +17,6 @@
     "strict": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src"],
+  "include": ["src", "plugin.json", "package.json"],
   "exclude": ["node_modules"]
 }
