@@ -8,7 +8,7 @@
     "build": "rollup -c",
     "watch": "rollup -c -w",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "zip": "rm -rf ./temp ./out/sincere-clock.zip && mkdir -p ./temp/sincere-clock && cp -r dist py_modules main.py package.json plugin.json README.md ./temp/sincere-clock/ && cd ./temp && zip -r ../out/sincere-clock.zip sincere-clock && cd .. && rm -rf ./temp"
+    "zip": "rm -rf ./temp ./out/sincere-clock.zip && mkdir -p ./temp/sincere-clock ./out && cp -r dist py_modules main.py package.json plugin.json README.md defaults ./temp/sincere-clock/ && cd ./temp && mv sincere-clock/defaults sincere-clock/dist/assets && zip -r ../out/sincere-clock.zip sincere-clock && cd .. && rm -rf ./temp"
   },
   "repository": {
     "type": "git",
