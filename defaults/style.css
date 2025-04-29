@@ -4,52 +4,52 @@
 }
 
 #sincere-clock-settings .color-picker-swatch {
-  width: var(--sincere-clock-swatch-size);
-  height: var(--sincere-clock-swatch-size);
-  border: 1px solid white;
-  border-radius: 4px;
-  cursor: pointer;
+    width: var(--sincere-clock-swatch-size);
+    height: var(--sincere-clock-swatch-size);
+    border: 1px solid white;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 #sincere-clock-overlay {
-  width: 20vw;
-  height: fit-content;
-  position: fixed;
-  pointer-events: none;
-  z-index: 6000; /* Less than MagicBlackDecky's z-value of 7002, so that'll be on top */
-  padding: 5px 10px;
-  border-radius: 4px;
+    width: 20vw;
+    height: fit-content;
+    position: fixed;
+    pointer-events: none;
+    z-index: 6000; /* Less than MagicBlackDecky's z-value of 7002, so that'll be on top */
+    padding: 5px 10px;
+    border-radius: 4px;
 }
 
 /* Position classes */
 #sincere-clock-overlay.position-top-left {
-  top: var(--position-offset);
-  left: var(--position-offset);
+    top: var(--position-offset);
+    left: var(--position-offset);
 }
 
 #sincere-clock-overlay.position-top-center {
-  top: var(--position-offset);
-  left: 50%;
-  transform: translateX(-50%);
+    top: var(--position-offset);
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 #sincere-clock-overlay.position-top-right {
-  top: var(--position-offset);
-  right: var(--position-offset);
+    top: var(--position-offset);
+    right: var(--position-offset);
 }
 
 #sincere-clock-overlay.position-bottom-left {
-  bottom: var(--position-offset);
-  left: var(--position-offset);
+    bottom: var(--position-offset);
+    left: var(--position-offset);
 }
 
 #sincere-clock-overlay.position-bottom-center {
-  bottom: var(--position-offset);
-  left: 50%;
-  transform: translateX(-50%);
+    bottom: var(--position-offset);
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 #sincere-clock-overlay.position-bottom-right {
-  bottom: var(--position-offset);
-  right: var(--position-offset);
+    bottom: var(--position-offset);
+    right: var(--position-offset);
 }
