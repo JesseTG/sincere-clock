@@ -28,7 +28,3 @@ export const POSITION_OPTIONS = [
 export const FONT_SIZE_MIN = 12;
 export const FONT_SIZE_MAX = 48;
 export const FONT_SIZE_STEP = 1;
-export const CLOCK_PADDING = "5px 10px";
-export const CLOCK_BORDER_RADIUS = "4px";
-export const CLOCK_Z_INDEX = 6000;
-export const POSITION_OFFSET = "10px";

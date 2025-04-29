@@ -14,6 +14,7 @@ import {
     FONT_SIZE_MAX,
     FONT_SIZE_STEP
 } from "../constants";
+import "../assets/style.css";
 
 export function SincereClockSettings() {
     const [state, setState] = usePluginState();
@@ -64,18 +65,12 @@ export function SincereClockSettings() {
             </PanelSectionRow>
 
             <PanelSectionRow>
-                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                <div className="color-picker-container">
                     <div>Font Color</div>
                     <div
                         onClick={() => setShowFontColorPicker(true)}
-                        style={{
-                            width: '24px',
-                            height: '24px',
-                            backgroundColor: state.fontColor,
-                            border: '1px solid white',
-                            borderRadius: '4px',
-                            cursor: 'pointer'
-                        }}
+                        className="color-swatch"
+                        style={{ backgroundColor: state.fontColor }}
                     />
                 </div>
                 {showFontColorPicker && (
@@ -88,18 +83,12 @@ export function SincereClockSettings() {
             </PanelSectionRow>
 
             <PanelSectionRow>
-                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                <div className="color-picker-container">
                     <div>Background Color</div>
                     <div
                         onClick={() => setShowBgColorPicker(true)}
-                        style={{
-                            width: '24px',
-                            height: '24px',
-                            backgroundColor: state.backgroundColor,
-                            border: '1px solid white',
-                            borderRadius: '4px',
-                            cursor: 'pointer'
-                        }}
+                        className="color-swatch"
+                        style={{ backgroundColor: state.backgroundColor }}
                     />
                 </div>
                 {showBgColorPicker && (
