@@ -1,5 +1,5 @@
 import {SteamClient} from "steam-types";
-import {definePlugin, ServerAPI, Plugin} from "decky-frontend-lib";
+import {definePlugin, ServerAPI, Plugin, findSP} from "decky-frontend-lib";
 import {FaStopwatch} from "react-icons/fa6";
 import {staticClasses} from "@decky/ui";
 import {routerHook} from "@decky/api";
@@ -9,13 +9,18 @@ import SincereClockDisplay from "./components/SincereClockDisplay";
 import {SincereClockSettings} from "./components/SincereClockSettings";
 import {StateManager} from "cotton-box";
 
+import styles from "../defaults/style.css";
+
 // noinspection JSUnusedGlobalSymbols
 export default definePlugin((_serverAPI: ServerAPI): Plugin => {
     const state = new StateManager<State>(new State());
-
-    const unwatch = state.watch((context, eventType) => {
-        console.debug("State updated:", eventType, context);
-    });
+    const spWindow = findSP();
+    const link = spWindow.document.createElement("link");
+    link.rel = "stylesheet";
+    link.type = "text/css";
+    link.href = styles;
+    console.log(link, styles);
+    spWindow.document.head.appendChild(link);
 
     routerHook.addGlobalComponent(GlobalComponentName, () => {
         return (
@@ -48,7 +53,7 @@ export default definePlugin((_serverAPI: ServerAPI): Plugin => {
             wakeRegistration.unregister();
             suspendRegistration.unregister();
             routerHook.removeGlobalComponent(GlobalComponentName);
-            unwatch();
+            link.remove();
         },
     };
 });
