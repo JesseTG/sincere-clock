@@ -2,7 +2,6 @@ import {findModuleChild,
 } from "@decky/ui";
 import {State, StateSetter, usePluginState, ClockPosition} from "../state";
 import {CSSProperties, useEffect} from "react";
-import "../assets/style.css";
 
 enum UIComposition {
     Hidden = 0,

@@ -21,8 +21,8 @@ export class State {
 
     // Clock customization options
     public readonly fontSize: number = DEFAULT_FONT_SIZE;
-    public readonly fontColor: string = DEFAULT_FONT_COLOR;
-    public readonly backgroundColor: string = DEFAULT_BACKGROUND_COLOR;
+    public readonly fontColor = DEFAULT_FONT_COLOR;
+    public readonly backgroundColor = DEFAULT_BACKGROUND_COLOR;
     public readonly position: ClockPosition = DEFAULT_POSITION;
 }
 

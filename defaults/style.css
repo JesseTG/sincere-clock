@@ -1,16 +1,11 @@
 :root {
     --position-offset: 10px;
+    --sincere-clock-swatch-size: 24px;
 }
 
-.color-picker-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.color-swatch {
-  width: 24px;
-  height: 24px;
+#sincere-clock-settings .color-picker-swatch {
+  width: var(--sincere-clock-swatch-size);
+  height: var(--sincere-clock-swatch-size);
   border: 1px solid white;
   border-radius: 4px;
   cursor: pointer;
