@@ -40,10 +40,10 @@ export function SincereClockSettings() {
             onConfirm={handleBgColorChange}
             closeModal={noop}
             title={"Background Color"}
-            defaultH={state.fontColor.hue()}
-            defaultS={state.fontColor.saturationl()}
-            defaultL={state.fontColor.lightness()}
-            defaultA={state.fontColor.alpha()}
+            defaultH={state.backgroundColor.hue()}
+            defaultS={state.backgroundColor.saturationl()}
+            defaultL={state.backgroundColor.lightness()}
+            defaultA={state.backgroundColor.alpha()}
         />);
     }
 
