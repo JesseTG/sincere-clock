@@ -1,39 +1,12 @@
-/**
- * Format a Date object to a local time string
- * @param date The date object to format
- * @returns Formatted time string (HH:MM:SS)
- */
-export function formatLocalTime(date: Date): string {
-  return date.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false
-  });
-}
+import { Temporal, Intl } from 'temporal-polyfill';
 
-/**
- * Format elapsed time from a reference date until now
- * @param referenceTime The reference date to calculate elapsed time from
- * @returns Formatted elapsed time string (HH:MM:SS)
- */
-export function formatElapsedTime(referenceTime: Date): string {
-  const now = new Date();
-  let elapsedMs = now.getTime() - referenceTime.getTime();
-  
-  if (elapsedMs < 0) {
-    elapsedMs = 0;
-  }
-  
-  // Calculate hours, minutes, seconds
-  const seconds = Math.floor((elapsedMs / 1000) % 60);
-  const minutes = Math.floor((elapsedMs / (1000 * 60)) % 60);
-  const hours = Math.floor(elapsedMs / (1000 * 60 * 60));
-  
-  // Format with leading zeros
-  const formattedHours = hours.toString().padStart(2, '0');
-  const formattedMinutes = minutes.toString().padStart(2, '0');
-  const formattedSeconds = seconds.toString().padStart(2, '0');
-  
-  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+// TODO: What if the locale is changed at runtime? Can that happen?
+const localDateTimeFormat = new Intl.DateTimeFormat([], {hour: "2-digit", minute: "2-digit", second: "2-digit"});
+
+export function localTime(): string {
+  const now = Temporal.Now.instant(); // TODO: Get the time from one of the Python backend functions
+
+  // TODO: Create a Intl.DateTimeFormat and use its format() method,
+  // so that it doesn't have to keep looking up the same localization format strings
+  return localDateTimeFormat.format(now);
 }

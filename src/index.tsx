@@ -10,6 +10,7 @@ import {StateManager} from "cotton-box";
 
 import manifest from "../package.json" with { type: "json" };
 import styles from "../defaults/style.css";
+import {Temporal} from "temporal-polyfill";
 
 // noinspection JSUnusedGlobalSymbols
 export default definePlugin((): Plugin => {
@@ -31,13 +32,13 @@ export default definePlugin((): Plugin => {
     });
 
     const suspendRegistration = SteamClient.System.RegisterForOnSuspendRequest(() => {
-        const now = new Date();
+        const now = Temporal.Now.instant();
         console.debug("[SincereClock] Suspending at", now);
         state.set(prev => ({...prev, lastSleepTime: now}));
     });
 
     const wakeRegistration = SteamClient.System.RegisterForOnResumeFromSuspend(() => {
-        const now = new Date();
+        const now = Temporal.Now.instant();
         console.debug("[SincereClock] Waking up at", now);
         state.set(prev => ({...prev, lastWakeTime: now}));
     });

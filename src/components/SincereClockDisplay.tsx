@@ -2,6 +2,7 @@ import {findModuleChild,
 } from "@decky/ui";
 import {State, StateSetter, usePluginState, ClockPosition} from "../state";
 import {CSSProperties, useEffect} from "react";
+import {localTime} from "../utils/timeUtils";
 
 enum UIComposition {
     Hidden = 0,
@@ -32,7 +33,11 @@ function getPositionClass(position: ClockPosition): string {
     return `position-${position}`;
 }
 
-function SincereClockOverlay() {
+export type SincereClockDisplayProps = {
+    onClockTick: () => string;
+};
+
+function SincereClockOverlay(props: SincereClockDisplayProps) {
     const [state, setState] = usePluginState();
 
     useUIComposition(UIComposition.Notification);
@@ -47,7 +52,6 @@ function SincereClockOverlay() {
         return () => clearInterval(updateInterval);
     }, [setState]);
 
-    const now = new Date(); // TODO: Get the time from one of the Python backend functions
     const positionClass = getPositionClass(state.position);
 
     const dynamicStyle: CSSProperties = {
@@ -62,7 +66,7 @@ function SincereClockOverlay() {
             id="sincere-clock-overlay"
             className={positionClass}
         >
-            {now.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit", second: "2-digit"})}
+            {props.onClockTick()}
         </div>
         // TODO: Use Intl.DateTimeFormat to internationalize the time display
     );
@@ -72,7 +76,7 @@ export default function SincereClockDisplay() {
     const [state, setState] = usePluginState();
 
     // Hide the overlay if we've turned it off
-    return state.enabled ? <SincereClockOverlay /> : null;
+    return state.enabled ? <SincereClockOverlay onClockTick={localTime} /> : null;
 
     // The overlay is in a separate component
     // because you can't call hooks conditionally within a component

@@ -8,15 +8,16 @@ import {
     DEFAULT_POSITION,
     CLOCK_POSITIONS
 } from './constants';
+import { Temporal } from 'temporal-polyfill';
 
 export type ClockPosition = typeof CLOCK_POSITIONS[keyof typeof CLOCK_POSITIONS];
 
 export class State {
-    public readonly steamStartTime: Date | null = null;
-    public readonly lastBootTime: Date | null = null;
-    public readonly lastWakeTime: Date | null = null;
-    public readonly gameStartTime: Date | null = null;
-    public readonly lastSleepTime: Date | null = null;
+    public readonly steamStartTime: Temporal.Instant | null = null;
+    public readonly lastBootTime: Temporal.Instant | null = null;
+    public readonly lastWakeTime: Temporal.Instant | null = null;
+    public readonly gameStartTime: Temporal.Instant | null = null;
+    public readonly lastSleepTime: Temporal.Instant | null = null;
     public readonly enabled: boolean = true;
 
     // Clock customization options
