@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 import asyncio
+import json
 import logging
 import subprocess
+from datetime import datetime, timezone
 
 import sys
 import os
-import datetime
-from typing import Optional
+from typing import Optional, Any
 import decky
 from decky import logger
 from settings import SettingsManager
@@ -56,14 +57,14 @@ def get_steam_pid() -> Optional[int]:
 
     return steam_pid
 
-def get_boot_time():
+def get_boot_time() -> Optional[datetime]:
     # Read the kernel/system stats from /proc/stat
     with open("/proc/stat", 'r') as f:
         for line in f:
             if line.startswith("btime "):
                 boot_time_secs = int(line.split()[1])
                 # Convert to milliseconds
-                return boot_time_secs * 1000
+                return datetime.fromtimestamp(boot_time_secs, timezone.utc)
         else:
             logger.warning("Could not find boot time in /proc/stat")
             return None
@@ -119,16 +120,18 @@ class Plugin:
         logger.debug(f"Python version {sys.version}")
         logger.debug(f"ppid: {os.getppid()}")
         logger.info("Plugin started")
-        self._plugin_start_time: datetime = datetime.datetime.now(datetime.timezone.utc)
+        self._plugin_start_time: datetime = datetime.now(timezone.utc)
         self.loop = asyncio.get_event_loop()
 
     async def _main(self):
         pass
 
     @staticmethod
-    async def get_boot_time() -> int:
+    async def get_boot_time() -> Optional[str]:
         """Get the boot time of the system"""
-        return get_boot_time()
+        boot_time = get_boot_time()
+        logger.info(f"Boot time: {boot_time}")
+        return boot_time.isoformat() if boot_time else None
 
     @staticmethod
     async def get_game_start_time() -> Optional[int]:
@@ -148,6 +151,14 @@ class Plugin:
             return get_process_start_time(steam_pid)
         # TODO: Is this needed, or can I get it on the frontend?
         return None
+
+    @staticmethod
+    async def get_setting(key: str, default: Any) -> Any:
+        return settings.getSetting(key, default)
+
+    @staticmethod
+    async def set_setting(key: str, value: Any):
+        settings.setSetting(key, value)
 
 
 if __name__ == "__main__":

@@ -28,6 +28,14 @@ export async function getStartTimes(): Promise<StartTimes> {
     };
 }
 
+export async function setSetting<T>(key: string, value: T): Promise<void> {
+    await call('set_setting', key, value);
+}
+
+export async function getSetting<T>(key: string): Promise<T> {
+    return await call('get_setting', key);
+}
+
 export async function getBootTime(): Promise<Temporal.Instant | null> {
     const bootTime = await call<[], string | null>('get_boot_time');
 
