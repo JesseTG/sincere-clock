@@ -1,8 +1,10 @@
 import {findModuleChild,
 } from "@decky/ui";
-import {State, StateSetter, usePluginState, ClockPosition} from "../state";
+import {usePluginState, ClockPosition} from "../state";
 import {CSSProperties, useEffect} from "react";
-import {localTime} from "../utils/timeUtils";
+import {format, localTime} from "../utils/timeUtils";
+import {getBootTime} from "../utils/backend";
+import { Temporal } from "temporal-polyfill";
 
 enum UIComposition {
     Hidden = 0,
@@ -33,11 +35,7 @@ function getPositionClass(position: ClockPosition): string {
     return `position-${position}`;
 }
 
-export type SincereClockDisplayProps = {
-    onClockTick: () => string;
-};
-
-function SincereClockOverlay(props: SincereClockDisplayProps) {
+function SincereClockOverlay() {
     const [state, setState] = usePluginState();
 
     useUIComposition(UIComposition.Notification);
@@ -60,13 +58,16 @@ function SincereClockOverlay(props: SincereClockDisplayProps) {
         fontSize: `${state.fontSize}px`,
     };
 
+    const now = Temporal.Now.instant();
+    const timeString = format(state.lastBootTime ? now.since(state.lastBootTime): now);
+
     return (
         <div
             style={dynamicStyle}
             id="sincere-clock-overlay"
             className={positionClass}
         >
-            {props.onClockTick()}
+            {timeString}
         </div>
         // TODO: Use Intl.DateTimeFormat to internationalize the time display
     );
@@ -75,8 +76,25 @@ function SincereClockOverlay(props: SincereClockDisplayProps) {
 export default function SincereClockDisplay() {
     const [state, setState] = usePluginState();
 
+    // Fetch boot time on component mount (even if it's hidden)
+    useEffect(() => {
+        async function fetchBootTime() {
+            const bootTime = await getBootTime();
+            if (!bootTime) {
+                console.warn("Boot time not found");
+                return;
+            }
+
+            setState(prev => ({...prev, lastBootTime: bootTime}));
+        }
+
+        if (!state.lastBootTime) {
+            fetchBootTime();
+        }
+    }, [setState, state.lastBootTime]);
+
     // Hide the overlay if we've turned it off
-    return state.enabled ? <SincereClockOverlay onClockTick={localTime} /> : null;
+    return state.enabled ? <SincereClockOverlay /> : null;
 
     // The overlay is in a separate component
     // because you can't call hooks conditionally within a component

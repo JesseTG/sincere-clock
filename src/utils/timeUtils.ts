@@ -10,3 +10,16 @@ export function localTime(): string {
   // so that it doesn't have to keep looking up the same localization format strings
   return localDateTimeFormat.format(now);
 }
+
+export function format(temporal: Temporal.Instant | Temporal.Duration): string {
+  if (temporal instanceof Temporal.Instant) {
+    return localDateTimeFormat.format(temporal);
+  }
+
+  // HACK: Workaround for Intl.DurationFormat not being available in the polyfill
+  const hours = Math.floor(temporal.total({unit: "hour"}));
+  const minutes = Math.floor(temporal.total({unit: "minute"})) % 60;
+  const seconds = Math.floor(temporal.total({unit: "second"})) % 60;
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  // return temporal.toLocaleString([], {style: "digital", hours: "2-digit", fractionalDigits: 0});
+}

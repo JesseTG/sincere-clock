@@ -1,4 +1,5 @@
 import { call } from '@decky/api';
+import { Temporal } from "temporal-polyfill";
 
 export interface StartTimes {
     bootTime: Date,
@@ -25,4 +26,10 @@ export async function getStartTimes(): Promise<StartTimes> {
         pluginStartTime: new Date(times.plugin_start_time),
         steamStartTime: new Date(times.steam_start_time),
     };
+}
+
+export async function getBootTime(): Promise<Temporal.Instant | null> {
+    const bootTime = await call<[], string | null>('get_boot_time');
+
+    return bootTime ? Temporal.Instant.from(bootTime) : null;
 }
