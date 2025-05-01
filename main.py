@@ -63,7 +63,6 @@ def get_boot_time() -> Optional[datetime]:
         for line in f:
             if line.startswith("btime "):
                 boot_time_secs = int(line.split()[1])
-                # Convert to milliseconds
                 return datetime.fromtimestamp(boot_time_secs, timezone.utc)
         else:
             logger.warning("Could not find boot time in /proc/stat")
@@ -104,7 +103,7 @@ def get_process_start_time(pid: int) -> Optional[datetime]:
                 logger.warning("Could not find boot time in /proc/stat")
                 return None
 
-        # Convert the "starttime" field from clock ticks to milliseconds since epoch
+        # Convert the "starttime" field from clock ticks to seconds since epoch
         start_time_secs = boot_time_secs + (start_time_ticks / clock_ticks)
 
         return datetime.fromtimestamp(start_time_secs, timezone.utc)

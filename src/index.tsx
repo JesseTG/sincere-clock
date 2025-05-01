@@ -20,7 +20,6 @@ export default definePlugin((): Plugin => {
     link.rel = "stylesheet";
     link.type = "text/css";
     link.href = styles;
-    console.log(link, styles);
     spWindow.document.head.appendChild(link);
 
     routerHook.addGlobalComponent(GlobalComponentName, () => {
