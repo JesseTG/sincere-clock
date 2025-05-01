@@ -59,7 +59,7 @@ function SincereClockOverlay() {
     };
 
     const now = Temporal.Now.instant();
-    const timeString = format(state.steamStartTime ? now.since(state.steamStartTime): now);
+    const timeString = format(now);
 
     return (
         <div
