@@ -69,7 +69,7 @@ def get_boot_time() -> Optional[datetime]:
             logger.warning("Could not find boot time in /proc/stat")
             return None
 
-def get_process_start_time(pid: int) -> Optional[int]:
+def get_process_start_time(pid: int) -> Optional[datetime]:
     try:
         # Read /proc/<pid>/stat
         with open(f"/proc/{pid}/stat", 'r') as f:
@@ -106,9 +106,8 @@ def get_process_start_time(pid: int) -> Optional[int]:
 
         # Convert the "starttime" field from clock ticks to milliseconds since epoch
         start_time_secs = boot_time_secs + (start_time_ticks / clock_ticks)
-        start_time_ms = int(start_time_secs * 1000)
 
-        return start_time_ms
+        return datetime.fromtimestamp(start_time_secs, timezone.utc)
 
     except Exception as e:
         logger.error(f"Error getting process start time: {e}")
@@ -130,7 +129,6 @@ class Plugin:
     async def get_boot_time() -> Optional[str]:
         """Get the boot time of the system"""
         boot_time = get_boot_time()
-        logger.info(f"Boot time: {boot_time}")
         return boot_time.isoformat() if boot_time else None
 
     @staticmethod
@@ -144,13 +142,14 @@ class Plugin:
         return None
 
     @staticmethod
-    async def get_steam_start_time() -> Optional[int]:
+    async def get_steam_start_time() -> Optional[str]:
         """Get the start time of Steam"""
         steam_pid = get_steam_pid()
-        if steam_pid:
-            return get_process_start_time(steam_pid)
-        # TODO: Is this needed, or can I get it on the frontend?
-        return None
+        if not steam_pid:
+            return None
+
+        start_time = get_process_start_time(steam_pid)
+        return start_time.isoformat() if start_time else None
 
     @staticmethod
     async def get_setting(key: str, default: Any) -> Any:

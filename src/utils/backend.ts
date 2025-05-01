@@ -41,3 +41,9 @@ export async function getBootTime(): Promise<Temporal.Instant | null> {
 
     return bootTime ? Temporal.Instant.from(bootTime) : null;
 }
+
+export async function getSteamStartTime(): Promise<Temporal.Instant | null> {
+    const steamStartTime = await call<[], string | null>('get_steam_start_time');
+
+    return steamStartTime ? Temporal.Instant.from(steamStartTime) : null;
+}

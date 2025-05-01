@@ -3,7 +3,7 @@ import {findModuleChild,
 import {usePluginState, ClockPosition} from "../state";
 import {CSSProperties, useEffect} from "react";
 import {format, localTime} from "../utils/timeUtils";
-import {getBootTime} from "../utils/backend";
+import {getBootTime, getSteamStartTime} from "../utils/backend";
 import { Temporal } from "temporal-polyfill";
 
 enum UIComposition {
@@ -59,7 +59,7 @@ function SincereClockOverlay() {
     };
 
     const now = Temporal.Now.instant();
-    const timeString = format(state.lastBootTime ? now.since(state.lastBootTime): now);
+    const timeString = format(state.steamStartTime ? now.since(state.steamStartTime): now);
 
     return (
         <div
@@ -88,10 +88,24 @@ export default function SincereClockDisplay() {
             setState(prev => ({...prev, lastBootTime: bootTime}));
         }
 
+        async function fetchSteamStartTime() {
+            const steamStartTime = await getSteamStartTime();
+            if (!steamStartTime) {
+                console.warn("Steam start time not found");
+                return;
+            }
+
+            setState(prev => ({...prev, steamStartTime: steamStartTime}));
+        }
+
         if (!state.lastBootTime) {
             fetchBootTime();
         }
-    }, [setState, state.lastBootTime]);
+
+        if (!state.steamStartTime) {
+            fetchSteamStartTime();
+        }
+    }, [setState, state.lastBootTime, state.steamStartTime]);
 
     // Hide the overlay if we've turned it off
     return state.enabled ? <SincereClockOverlay /> : null;
