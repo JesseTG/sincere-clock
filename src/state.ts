@@ -6,11 +6,14 @@ import {
     DEFAULT_FONT_COLOR,
     DEFAULT_BACKGROUND_COLOR,
     DEFAULT_POSITION,
-    CLOCK_POSITIONS
+    CLOCK_POSITIONS,
+    CLOCK_MODES,
+    DEFAULT_CLOCK_MODE
 } from './constants';
 import { Temporal } from 'temporal-polyfill';
 
 export type ClockPosition = typeof CLOCK_POSITIONS[keyof typeof CLOCK_POSITIONS];
+export type ClockMode = typeof CLOCK_MODES[keyof typeof CLOCK_MODES];
 
 export class State {
     public readonly steamStartTime: Temporal.Instant | null = null;
@@ -25,6 +28,7 @@ export class State {
     public readonly fontColor = DEFAULT_FONT_COLOR;
     public readonly backgroundColor = DEFAULT_BACKGROUND_COLOR;
     public readonly position: ClockPosition = DEFAULT_POSITION;
+    public readonly clockMode: ClockMode = DEFAULT_CLOCK_MODE;
 }
 
 export type StateSetter<T> = Dispatch<SetStateAction<T>>;
@@ -41,3 +45,4 @@ export const usePluginState = () => {
 
     return [state, setState, context] as [State, (setter: (state: State) => State) => void, StateManager<State>];
 };
+

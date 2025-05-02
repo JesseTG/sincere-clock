@@ -29,3 +29,22 @@ export const POSITION_OPTIONS = [
 export const FONT_SIZE_MIN = 12;
 export const FONT_SIZE_MAX = 48;
 export const FONT_SIZE_STEP = 1;
+
+// Clock mode constants
+export const CLOCK_MODES = {
+  CURRENT_TIME: "current-time",
+  SINCE_BOOT: "since-boot",
+  SINCE_STEAM: "since-steam",
+  SINCE_WAKE: "since-wake",
+  SINCE_GAME: "since-game"
+} as const;
+
+export const DEFAULT_CLOCK_MODE = CLOCK_MODES.CURRENT_TIME;
+
+export const CLOCK_MODE_OPTIONS = [
+  { data: CLOCK_MODES.CURRENT_TIME, label: "Current Time" },
+  { data: CLOCK_MODES.SINCE_BOOT, label: "Time Since Boot" },
+  { data: CLOCK_MODES.SINCE_STEAM, label: "Time Since Steam Started" },
+  { data: CLOCK_MODES.SINCE_WAKE, label: "Time Since Wake" },
+  { data: CLOCK_MODES.SINCE_GAME, label: "Time Since Game Started" },
+];
