@@ -67,15 +67,16 @@ export function SincereClockSettings() {
         setState((prev) => ({...prev, position}));
     }
 
+    // TODO: I want to move this to the CSS,
+    //  but the Quick Access Menu has its own Window
+    //  and I don't know how to get it
     const swatchPreviewStyle = {
         width: '24px',
         height: '24px',
         border: '1px solid white',
         borderRadius: '4px',
         cursor: 'pointer'
-    }; // TODO: I want to move this to the CSS,
-    // but the Quick Access Menu has its own Window
-    // and I don't know how to get it
+    };
 
     // TODO: Add a reset button to reset the colors to default
     return (
