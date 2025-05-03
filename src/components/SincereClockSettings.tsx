@@ -8,14 +8,15 @@ import {
     Field,
     showModal
 } from "@decky/ui";
-import {usePluginState, ClockPosition} from "../state";
+import {usePluginState, ClockPosition, ClockMode} from "../state";
 import {useState} from "react";
 import Color from "color";
 import {
     POSITION_OPTIONS,
     FONT_SIZE_MIN,
     FONT_SIZE_MAX,
-    FONT_SIZE_STEP
+    FONT_SIZE_STEP,
+    CLOCK_MODE_OPTIONS
 } from "../constants";
 
 export function SincereClockSettings() {
@@ -67,6 +68,10 @@ export function SincereClockSettings() {
         setState((prev) => ({...prev, position}));
     }
 
+    function handleClockModeChange(clockMode: ClockMode) {
+        setState((prev) => ({...prev, clockMode}));
+    }
+
     // TODO: I want to move this to the CSS,
     //  but the Quick Access Menu has its own Window
     //  and I don't know how to get it
@@ -87,6 +92,15 @@ export function SincereClockSettings() {
                         label="Enable Clock"
                         checked={state.enabled}
                         onChange={handleToggleChange}
+                    />
+                </PanelSectionRow>
+
+                <PanelSectionRow>
+                    <Dropdown
+                        menuLabel="Clock Mode"
+                        selectedOption={state.clockMode}
+                        rgOptions={CLOCK_MODE_OPTIONS}
+                        onChange={(e) => handleClockModeChange(e.data as ClockMode)}
                     />
                 </PanelSectionRow>
 

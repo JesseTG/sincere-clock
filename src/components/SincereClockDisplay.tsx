@@ -1,10 +1,11 @@
 import {findModuleChild,
 } from "@decky/ui";
 import {usePluginState, ClockPosition} from "../state";
-import {CSSProperties, useEffect} from "react";
+import {CSSProperties, useEffect, useState} from "react";
 import {format, localTime} from "../utils/timeUtils";
-import {getBootTime, getSteamStartTime} from "../utils/backend";
+import {getBootTime, getSteamStartTime, getLastWakeTime, getGameStartTime} from "../utils/backend";
 import { Temporal } from "temporal-polyfill";
+import { CLOCK_MODES } from "../constants";
 
 enum UIComposition {
     Hidden = 0,
@@ -37,8 +38,31 @@ function getPositionClass(position: ClockPosition): string {
 
 function SincereClockOverlay() {
     const [state, setState] = usePluginState();
+    const [wakeTime, setWakeTime] = useState<Temporal.Instant | null>(null);
+    const [gameTime, setGameTime] = useState<Temporal.Instant | null>(null);
 
     useUIComposition(UIComposition.Notification);
+
+    // Fetch game and wake times
+    useEffect(() => {
+        async function fetchWakeTime() {
+            const time = await getLastWakeTime();
+            setWakeTime(time);
+        }
+
+        async function fetchGameTime() {
+            const time = await getGameStartTime();
+            setGameTime(time);
+        }
+
+        if (state.clockMode === CLOCK_MODES.SINCE_WAKE) {
+            fetchWakeTime();
+        }
+
+        if (state.clockMode === CLOCK_MODES.SINCE_GAME) {
+            fetchGameTime();
+        }
+    }, [state.clockMode]);
 
     // Force update every half-second (to keep the display a little more consistent)
     useEffect(() => {
@@ -58,8 +82,30 @@ function SincereClockOverlay() {
         fontSize: `${state.fontSize}px`,
     };
 
+    // Get the appropriate time based on the clock mode
+    // TODO: Show a blinking animation when the time isn't available,
+    //  make it look like a digital clock that was just powered on
     const now = Temporal.Now.instant();
-    const timeString = format(now);
+    let timeString: string;
+    switch (state.clockMode) {
+        case CLOCK_MODES.CURRENT_TIME:
+            timeString = format(now);
+            break;
+        case CLOCK_MODES.SINCE_BOOT:
+            timeString = state.lastBootTime ? format(now.since(state.lastBootTime)) : "--:--:--";
+            break;
+        case CLOCK_MODES.SINCE_STEAM:
+            timeString = state.steamStartTime ? format(now.since(state.steamStartTime)) : "--:--:--";
+            break;
+        case CLOCK_MODES.SINCE_WAKE:
+            timeString = state.lastWakeTime ? format(now.since(state.lastWakeTime)) : "--:--:--";
+            break;
+        case CLOCK_MODES.SINCE_GAME:
+            timeString = state.gameStartTime ? format(now.since(state.gameStartTime)) : "--:--:--";
+            break;
+        default:
+            timeString = format(now);
+    }
 
     return (
         <div
@@ -98,14 +144,35 @@ export default function SincereClockDisplay() {
             setState(prev => ({...prev, steamStartTime: steamStartTime}));
         }
 
+        async function fetchGameStartTime() {
+            const gameStartTime = await getGameStartTime();
+            if (gameStartTime) {
+                setState(prev => ({...prev, gameStartTime}));
+            }
+            // TODO: Log a warning if we're in the middle of the game
+            //  (because then we should be able to find out the process start time)
+            // TODO: Should I show a warning to the user if the game start time is null?
+            //  That would mean something's really wrong.
+        }
+
         if (!state.lastBootTime) {
+            // Intentionally not awaited
+            // noinspection JSIgnoredPromiseFromCall
             fetchBootTime();
         }
 
         if (!state.steamStartTime) {
+            // Intentionally not awaited
+            // noinspection JSIgnoredPromiseFromCall
             fetchSteamStartTime();
         }
-    }, [setState, state.lastBootTime, state.steamStartTime]);
+
+        if (!state.gameStartTime) {
+            // Intentionally not awaited
+            // noinspection JSIgnoredPromiseFromCall
+            fetchGameStartTime();
+        }
+    }, [setState, state.lastBootTime, state.steamStartTime, state.gameStartTime]);
 
     // Hide the overlay if we've turned it off
     return state.enabled ? <SincereClockOverlay /> : null;

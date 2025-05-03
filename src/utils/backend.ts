@@ -47,3 +47,16 @@ export async function getSteamStartTime(): Promise<Temporal.Instant | null> {
 
     return steamStartTime ? Temporal.Instant.from(steamStartTime) : null;
 }
+
+export async function getLastWakeTime(): Promise<Temporal.Instant | null> {
+    // Placeholder function - to be implemented later
+    // For now, return a time 1 hour ago as a placeholder
+    const oneHourAgo = Temporal.Now.instant().subtract({ hours: 1 });
+    return oneHourAgo;
+}
+
+export async function getGameStartTime(): Promise<Temporal.Instant | null> {
+    const gameStartTime = await call<[], string | null>('get_game_start_time');
+
+    return gameStartTime ? Temporal.Instant.from(gameStartTime) : null;
+}
