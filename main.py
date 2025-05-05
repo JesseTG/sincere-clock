@@ -131,14 +131,15 @@ class Plugin:
         return boot_time.isoformat() if boot_time else None
 
     @staticmethod
-    async def get_game_start_time() -> Optional[int]:
+    async def get_game_start_time() -> Optional[str]:
         """Get the start time of the game"""
         game_pid = get_game_pid()
-        if game_pid:
-            return get_process_start_time(game_pid)
-        # TODO: Is this needed, or can I get it on the frontend?
+        if not game_pid:
+            return None
+
         # TODO: I don't want to count time suspended
-        return None
+        start_time = get_process_start_time(game_pid)
+        return start_time.isoformat() if start_time else None
 
     @staticmethod
     async def get_steam_start_time() -> Optional[str]:
