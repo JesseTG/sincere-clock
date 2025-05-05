@@ -11,6 +11,7 @@ import {StateManager} from "cotton-box";
 import manifest from "../package.json" with { type: "json" };
 import styles from "../defaults/style.css";
 import {Temporal} from "temporal-polyfill";
+import {LuClock3} from "react-icons/lu";
 
 // noinspection JSUnusedGlobalSymbols
 export default definePlugin((): Plugin => {
@@ -50,7 +51,7 @@ export default definePlugin((): Plugin => {
             <PluginContext.Provider value={state}>
                 <SincereClockSettings/>
             </PluginContext.Provider>,
-        icon: <FaStopwatch/>,
+        icon: <LuClock3 />,
         onDismount() {
             wakeRegistration.unregister();
             suspendRegistration.unregister();
