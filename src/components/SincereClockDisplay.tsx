@@ -1,36 +1,10 @@
-import {findModuleChild,
-} from "@decky/ui";
 import {usePluginState, ClockPosition} from "../state";
 import {CSSProperties, useEffect, useState} from "react";
 import {format, localTime} from "../utils/timeUtils";
 import {getBootTime, getSteamStartTime, getLastWakeTime, getGameStartTime} from "../utils/backend";
 import { Temporal } from "temporal-polyfill";
 import {CLOCK_MODE_ICONS, CLOCK_MODES} from "../constants";
-
-enum UIComposition {
-    Hidden = 0,
-    Notification = 1,
-    Overlay = 2,
-    Opaque = 3,
-    OverlayKeyboard = 4,
-}
-
-const useUIComposition: (composition: UIComposition) => void = findModuleChild(
-    (m) => {
-        if (typeof m !== "object") return undefined;
-        for (const prop in m) {
-            if (
-                typeof m[prop] === "function" &&
-                m[prop].toString().includes("AddMinimumCompositionStateRequest") &&
-                m[prop].toString().includes("ChangeMinimumCompositionStateRequest") &&
-                m[prop].toString().includes("RemoveMinimumCompositionStateRequest") &&
-                !m[prop].toString().includes("m_mapCompositionStateRequests")
-            ) {
-                return m[prop];
-            }
-        }
-    }
-);
+import {UIComposition, useUIComposition} from "../hooks/ui";
 
 function getPositionClass(position: ClockPosition): string {
     return `position-${position}`;
