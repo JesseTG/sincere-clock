@@ -1,7 +1,7 @@
 import {Temporal, Intl} from 'temporal-polyfill';
 
 // TODO: What if the locale is changed at runtime? Can that happen?
-const localDateTimeFormat = new Intl.DateTimeFormat([], {hour: "2-digit", minute: "2-digit", second: "2-digit"});
+export const localDateTimeFormat = new Intl.DateTimeFormat([], {hour: "2-digit", minute: "2-digit", second: "2-digit"});
 
 export function localTime(): string {
     const now = Temporal.Now.instant(); // TODO: Get the time from one of the Python backend functions
