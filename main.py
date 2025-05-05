@@ -152,6 +152,37 @@ class Plugin:
         return start_time.isoformat() if start_time else None
 
     @staticmethod
+    async def get_last_wake_time() -> Optional[str]:
+        """Get the last time the system was awoken from sleep mode"""
+        process = await asyncio.create_subprocess_exec(
+            "journalctl",
+            "--unit=systemd-suspend.service",
+            "--grep=Finished System Suspend",
+            "--output=short-iso",
+            "--boot",
+            "--lines=1",
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+
+        stdout, _ = await process.communicate()
+
+        if not stdout:
+            logger.info("journalctl returned no prior wake time")
+            return None
+
+        # Extract the timestamp (everything before the first space)
+        output = stdout.decode('utf-8').strip()
+        if not output:
+            logger.warning("Output from journalctl is empty")
+            return None
+
+        # Output is similar to "2025-05-05T19:11:37-04:00 steamdeck systemd[1]: Finished System Suspend",
+        # so we extract the timestamp
+        timestamp = output.split(' ')[0]
+        return timestamp
+
+    @staticmethod
     async def get_setting(key: str, default: Any) -> Any:
         return settings.getSetting(key, default)
 
@@ -162,3 +193,4 @@ class Plugin:
 
 if __name__ == "__main__":
     raise RuntimeError("This script is a backend for a Decky plugin, and is not meant to be run directly.")
+
