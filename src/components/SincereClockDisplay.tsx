@@ -5,7 +5,7 @@ import {CSSProperties, useEffect, useState} from "react";
 import {format, localTime} from "../utils/timeUtils";
 import {getBootTime, getSteamStartTime, getLastWakeTime, getGameStartTime} from "../utils/backend";
 import { Temporal } from "temporal-polyfill";
-import { CLOCK_MODES } from "../constants";
+import {CLOCK_MODE_ICONS, CLOCK_MODES} from "../constants";
 
 enum UIComposition {
     Hidden = 0,
@@ -113,7 +113,8 @@ function SincereClockOverlay() {
             id="sincere-clock-overlay"
             className={positionClass}
         >
-            {timeString}
+            <span style={{paddingRight: "1ex"}}>{CLOCK_MODE_ICONS[state.clockMode]}</span>
+            <span>{timeString}</span>
         </div>
         // TODO: Use Intl.DateTimeFormat to internationalize the time display
     );
