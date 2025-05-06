@@ -1,44 +1,30 @@
 import {usePluginState, ClockPosition} from "../state";
-import {CSSProperties, useEffect, useState} from "react";
-import {format, localTime} from "../utils/timeUtils";
-import {getBootTime, getSteamStartTime, getLastWakeTime, getGameStartTime} from "../utils/backend";
+import {CSSProperties, ReactElement, useEffect} from "react";
+import {getBootTime, getSteamStartTime, getGameStartTime} from "../utils/backend";
 import { Temporal } from "temporal-polyfill";
-import {CLOCK_MODE_ICONS, CLOCK_MODES} from "../constants";
+import {CLOCK_MODES} from "../constants";
 import {UIComposition, useUIComposition} from "../hooks/ui";
+import Clock from "./clock/Clock";
+import TimeSinceBoot from "./clock/TimeSinceBoot";
+import TimeSinceSteamStarted from "./clock/TimeSinceSteamStarted";
+import TimeSinceWake from "./clock/TimeSinceWake";
+import TimeSinceGameStarted from "./clock/TimeSinceGameStarted";
 
 function getPositionClass(position: ClockPosition): string {
     return `position-${position}`;
 }
 
 function SincereClockOverlay() {
+    // TODO: Consider using `useCallback` as a performance optimization
+    //  (but use `<Profiler>` to measure the render time first)
     const [state, setState] = usePluginState();
-    const [wakeTime, setWakeTime] = useState<Temporal.Instant | null>(null);
-    const [gameTime, setGameTime] = useState<Temporal.Instant | null>(null);
 
     useUIComposition(UIComposition.Notification);
 
-    // Fetch game and wake times
-    useEffect(() => {
-        async function fetchWakeTime() {
-            const time = await getLastWakeTime();
-            setWakeTime(time);
-        }
-
-        async function fetchGameTime() {
-            const time = await getGameStartTime();
-            setGameTime(time);
-        }
-
-        if (state.clockMode === CLOCK_MODES.SINCE_WAKE) {
-            fetchWakeTime();
-        }
-
-        if (state.clockMode === CLOCK_MODES.SINCE_GAME) {
-            fetchGameTime();
-        }
-    }, [state.clockMode]);
-
-    // Force update every half-second (to keep the display a little more consistent)
+    // Force update every half-second
+    // (to keep the display updates a little smoother
+    // than the default 1-second interval,
+    // as the delay in setInterval is not guaranteed to be exact)
     useEffect(() => {
         const updateInterval = setInterval(() => {
             // Force a re-render by setting a new object (even if its values are the same)
@@ -46,6 +32,7 @@ function SincereClockOverlay() {
         }, 500);
 
         return () => clearInterval(updateInterval);
+        // TODO: If using a stopwatch, use requestAnimationFrame instead
     }, [setState]);
 
     const positionClass = getPositionClass(state.position);
@@ -60,26 +47,28 @@ function SincereClockOverlay() {
     // TODO: Show a blinking animation when the time isn't available,
     //  make it look like a digital clock that was just powered on
     const now = Temporal.Now.instant();
-    let timeString: string;
+    let clockComponent: ReactElement;
     switch (state.clockMode) {
         case CLOCK_MODES.CURRENT_TIME:
-            timeString = format(now);
+            clockComponent = <Clock time={now}/>;
             break;
         case CLOCK_MODES.SINCE_BOOT:
-            timeString = state.lastBootTime ? format(now.since(state.lastBootTime)) : "--:--:--";
+            clockComponent = <TimeSinceBoot now={now} bootTime={state.lastBootTime} />;
             break;
         case CLOCK_MODES.SINCE_STEAM:
-            timeString = state.steamStartTime ? format(now.since(state.steamStartTime)) : "--:--:--";
+            clockComponent = <TimeSinceSteamStarted now={now} startTime={state.steamStartTime} />;
             break;
         case CLOCK_MODES.SINCE_WAKE:
-            timeString = state.lastWakeTime ? format(now.since(state.lastWakeTime)) : "--:--:--";
+            clockComponent = <TimeSinceWake now={now} wakeTime={state.lastWakeTime} />;
             break;
         case CLOCK_MODES.SINCE_GAME:
-            timeString = state.gameStartTime ? format(now.since(state.gameStartTime)) : "--:--:--";
+            clockComponent = <TimeSinceGameStarted now={now} startTime={state.gameStartTime} />
             break;
         default:
-            timeString = format(now);
+            clockComponent = <Clock time={now}/>
+            break;
     }
+    // TODO: Put this in an array of ClockTypes instead of using a switch-case
 
     return (
         <div
@@ -87,8 +76,7 @@ function SincereClockOverlay() {
             id="sincere-clock-overlay"
             className={positionClass}
         >
-            <span style={{paddingRight: "1ex"}}>{CLOCK_MODE_ICONS[state.clockMode]}</span>
-            <span>{timeString}</span>
+            {clockComponent}
         </div>
         // TODO: Use Intl.DateTimeFormat to internationalize the time display
     );
