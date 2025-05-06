@@ -30,7 +30,7 @@
   "homepage": "https://github.com/JesseTG/sincere-clock/issues#readme",
   "devDependencies": {
     "@decky/rollup": "^1.0.1",
-    "@decky/ui": "^4.9.0",
+    "@decky/ui": "^4.10.0",
     "@eslint/js": "^9.25.1",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
@@ -42,7 +42,6 @@
     "pnpm": "^10.10.0",
     "rollup": "^4.22.5",
     "rollup-plugin-import-assets": "^1.1.1",
-    "steam-types": "^0.1.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.31.0"
   },

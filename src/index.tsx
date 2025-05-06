@@ -1,4 +1,3 @@
-import {SteamClient} from "steam-types";
 import {FaStopwatch} from "react-icons/fa6";
 import {staticClasses, findSP} from "@decky/ui";
 import {routerHook, definePlugin, Plugin} from "@decky/api";
