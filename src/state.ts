@@ -16,11 +16,16 @@ export type ClockPosition = typeof CLOCK_POSITIONS[keyof typeof CLOCK_POSITIONS]
 export type ClockMode = typeof CLOCK_MODES[keyof typeof CLOCK_MODES];
 
 export class State {
+    constructor(pluginStartTime?: Temporal.Instant) {
+        this.pluginStartTime = pluginStartTime ?? Temporal.Now.instant();
+    }
+
     public readonly steamStartTime: Temporal.Instant | null = null;
     public readonly lastBootTime: Temporal.Instant | null = null;
     public readonly lastWakeTime: Temporal.Instant | null = null;
     public readonly gameStartTime: Temporal.Instant | null = null;
     public readonly lastSleepTime: Temporal.Instant | null = null;
+    public readonly pluginStartTime: Temporal.Instant;
     public readonly enabled: boolean = true;
 
     // Clock customization options

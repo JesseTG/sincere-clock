@@ -59,7 +59,9 @@ function SincereClockOverlay() {
             clockComponent = <TimeSinceSteamStarted now={now} startTime={state.steamStartTime} />;
             break;
         case CLOCK_MODES.SINCE_WAKE:
-            clockComponent = <TimeSinceWake now={now} wakeTime={state.lastWakeTime} />;
+            clockComponent = <TimeSinceWake now={now} wakeTime={state.lastWakeTime ?? state.pluginStartTime} />;
+            // If the Deck hasn't been awoken since the plugin was installed (or Decky was started),
+            // then just use the plugin's start time instead
             break;
         case CLOCK_MODES.SINCE_GAME:
             clockComponent = <TimeSinceGameStarted now={now} startTime={state.gameStartTime} />
@@ -140,25 +142,6 @@ export default function SincereClockDisplay() {
             fetchGameStartTime();
         }
     }, [setState, state.gameStartTime]);
-
-    useEffect(() => {
-        async function fetchLastWakeTime() {
-            const lastWakeTime = await getLastWakeTime();
-            if (lastWakeTime) {
-                setState(prev => ({...prev, lastWakeTime}));
-            }
-        }
-
-        if (!state.lastWakeTime) {
-            // Intentionally not awaited
-            // noinspection JSIgnoredPromiseFromCall
-            fetchLastWakeTime();
-            // Usually only called after this plugin is installed mid-session,
-            // therefore the handler registered with SteamClient.System.RegisterForOnResumeFromSuspend
-            // hasn't been called yet.
-            // TODO: Maybe I should return the last boot time if we just booted?
-        }
-    }, [setState, state.lastWakeTime]);
 
     // Hide the overlay if we've turned it off
     return state.enabled ? <SincereClockOverlay /> : null;

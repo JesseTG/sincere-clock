@@ -122,6 +122,18 @@ class Plugin:
         self.loop = asyncio.get_event_loop()
 
     async def _main(self):
+        # I could keep track of when the system was last awoken
+        # by watching for large gaps in the clock,
+        # even though the frontend uses SteamClient.System.RegisterForOnSuspendRequest.
+        # That way the wake-time clock would accurate even if
+        # the Deck is awoken by means other than Steam.
+        # However, this won't handle the case where
+        # the Deck was most recently awoken before this plugin was installed.
+        # I would use journalctl to find out when the Deck was last awoken from sleep mode,
+        # but that would require root access, and I don't want to ask for that.
+        # It probably won't be common unless I update this plugin frequently
+        # or it's frequently reinstalled.
+        # Not worth it for now.
         pass
 
     @staticmethod
@@ -150,37 +162,6 @@ class Plugin:
 
         start_time = get_process_start_time(steam_pid)
         return start_time.isoformat() if start_time else None
-
-    @staticmethod
-    async def get_last_wake_time() -> Optional[str]:
-        """Get the last time the system was awoken from sleep mode"""
-        process = await asyncio.create_subprocess_exec(
-            "journalctl",
-            "--unit=systemd-suspend.service",
-            "--grep=Finished System Suspend",
-            "--output=short-iso",
-            "--boot",
-            "--lines=1",
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
-
-        stdout, _ = await process.communicate()
-
-        if not stdout:
-            logger.info("journalctl returned no prior wake time")
-            return None
-
-        # Extract the timestamp (everything before the first space)
-        output = stdout.decode('utf-8').strip()
-        if not output:
-            logger.warning("Output from journalctl is empty")
-            return None
-
-        # Output is similar to "2025-05-05T19:11:37-04:00 steamdeck systemd[1]: Finished System Suspend",
-        # so we extract the timestamp
-        timestamp = output.split(' ')[0]
-        return timestamp
 
     @staticmethod
     async def get_setting(key: str, default: Any) -> Any:
