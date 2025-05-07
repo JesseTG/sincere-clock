@@ -1,6 +1,5 @@
 import Color from "color";
 import {LuClock, LuCoffee, LuGamepad2, LuSquarePower} from "react-icons/lu";
-import {SingleDropdownOption} from "@decky/ui";
 import {FaSteam} from "react-icons/fa6";
 export const GlobalComponentName = "SincereClock";
 
@@ -51,12 +50,3 @@ export const CLOCK_MODE_ICONS = {
     [CLOCK_MODES.SINCE_WAKE]: <LuCoffee/>,
     [CLOCK_MODES.SINCE_GAME]: <LuGamepad2/>,
 } as const;
-
-export const CLOCK_MODE_OPTIONS: SingleDropdownOption[] = [
-    { data: CLOCK_MODES.CURRENT_TIME, label: <>{CLOCK_MODE_ICONS[CLOCK_MODES.CURRENT_TIME]}<span>Current Time</span></> },
-    { data: CLOCK_MODES.SINCE_BOOT, label: <>{CLOCK_MODE_ICONS[CLOCK_MODES.SINCE_BOOT]}<span>Time Since Boot</span></> },
-    { data: CLOCK_MODES.SINCE_STEAM, label: <>{CLOCK_MODE_ICONS[CLOCK_MODES.SINCE_STEAM]}<span>Time Since Steam Started</span></> },
-    { data: CLOCK_MODES.SINCE_WAKE, label: <>{CLOCK_MODE_ICONS[CLOCK_MODES.SINCE_WAKE]}<span>Time Since Wake</span></> },
-    { data: CLOCK_MODES.SINCE_GAME, label: <>{CLOCK_MODE_ICONS[CLOCK_MODES.SINCE_GAME]}<span>Time Since Game Started</span></> },
-];
-

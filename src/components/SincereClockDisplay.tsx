@@ -1,14 +1,9 @@
 import {usePluginState, ClockPosition} from "../state";
-import {CSSProperties, ReactElement, useEffect} from "react";
-import {getBootTime, getSteamStartTime, getGameStartTime, getLastWakeTime} from "../utils/backend";
+import {CSSProperties, useEffect} from "react";
+import {getBootTime, getSteamStartTime, getGameStartTime} from "../utils/backend";
 import { Temporal } from "temporal-polyfill";
-import {CLOCK_MODES} from "../constants";
 import {UIComposition, useUIComposition} from "../hooks/ui";
-import Clock from "./clock/Clock";
-import TimeSinceBoot from "./clock/TimeSinceBoot";
-import TimeSinceSteamStarted from "./clock/TimeSinceSteamStarted";
-import TimeSinceWake from "./clock/TimeSinceWake";
-import TimeSinceGameStarted from "./clock/TimeSinceGameStarted";
+import {CLOCK_TYPES} from "./clock/modes";
 
 function getPositionClass(position: ClockPosition): string {
     return `position-${position}`;
@@ -43,34 +38,10 @@ function SincereClockOverlay() {
         fontSize: `${state.fontSize}px`,
     };
 
-    // Get the appropriate time based on the clock mode
-    // TODO: Show a blinking animation when the time isn't available,
-    //  make it look like a digital clock that was just powered on
+    // Find the appropriate clock type and render it
     const now = Temporal.Now.instant();
-    let clockComponent: ReactElement;
-    switch (state.clockMode) {
-        case CLOCK_MODES.CURRENT_TIME:
-            clockComponent = <Clock time={now}/>;
-            break;
-        case CLOCK_MODES.SINCE_BOOT:
-            clockComponent = <TimeSinceBoot now={now} bootTime={state.lastBootTime} />;
-            break;
-        case CLOCK_MODES.SINCE_STEAM:
-            clockComponent = <TimeSinceSteamStarted now={now} startTime={state.steamStartTime} />;
-            break;
-        case CLOCK_MODES.SINCE_WAKE:
-            clockComponent = <TimeSinceWake now={now} wakeTime={state.lastWakeTime ?? state.pluginStartTime} />;
-            // If the Deck hasn't been awoken since the plugin was installed (or Decky was started),
-            // then just use the plugin's start time instead
-            break;
-        case CLOCK_MODES.SINCE_GAME:
-            clockComponent = <TimeSinceGameStarted now={now} startTime={state.gameStartTime} />
-            break;
-        default:
-            clockComponent = <Clock time={now}/>
-            break;
-    }
-    // TODO: Put this in an array of ClockTypes instead of using a switch-case
+    const clockType = CLOCK_TYPES[state.clockMode];
+    const clockComponent = clockType.render(now, state);
 
     return (
         <div
@@ -150,3 +121,4 @@ export default function SincereClockDisplay() {
     // because you can't call hooks conditionally within a component
     // MagicBlackDecky does the same thing
 }
+

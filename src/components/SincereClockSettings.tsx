@@ -9,15 +9,14 @@ import {
     showModal
 } from "@decky/ui";
 import {usePluginState, ClockPosition, ClockMode} from "../state";
-import {useState} from "react";
 import Color from "color";
 import {
     POSITION_OPTIONS,
     FONT_SIZE_MIN,
     FONT_SIZE_MAX,
     FONT_SIZE_STEP,
-    CLOCK_MODE_OPTIONS
 } from "../constants";
+import {CLOCK_MODE_OPTIONS} from "./clock/modes";
 
 export function SincereClockSettings() {
     const [state, setState] = usePluginState();
