@@ -1,6 +1,6 @@
 import {usePluginState, ClockPosition} from "../state";
 import {CSSProperties, ReactElement, useEffect} from "react";
-import {getBootTime, getSteamStartTime, getGameStartTime} from "../utils/backend";
+import {getBootTime, getSteamStartTime, getGameStartTime, getLastWakeTime} from "../utils/backend";
 import { Temporal } from "temporal-polyfill";
 import {CLOCK_MODES} from "../constants";
 import {UIComposition, useUIComposition} from "../hooks/ui";
@@ -97,6 +97,14 @@ export default function SincereClockDisplay() {
             setState(prev => ({...prev, lastBootTime: bootTime}));
         }
 
+        if (!state.lastBootTime) {
+            // Intentionally not awaited
+            // noinspection JSIgnoredPromiseFromCall
+            fetchBootTime();
+        }
+    }, [setState, state.lastBootTime]);
+
+    useEffect(() => {
         async function fetchSteamStartTime() {
             const steamStartTime = await getSteamStartTime();
             if (!steamStartTime) {
@@ -107,6 +115,14 @@ export default function SincereClockDisplay() {
             setState(prev => ({...prev, steamStartTime: steamStartTime}));
         }
 
+        if (!state.steamStartTime) {
+            // Intentionally not awaited
+            // noinspection JSIgnoredPromiseFromCall
+            fetchSteamStartTime();
+        }
+    }, [setState, state.steamStartTime]);
+
+    useEffect(() => {
         async function fetchGameStartTime() {
             const gameStartTime = await getGameStartTime();
             if (gameStartTime) {
@@ -118,24 +134,31 @@ export default function SincereClockDisplay() {
             //  That would mean something's really wrong.
         }
 
-        if (!state.lastBootTime) {
-            // Intentionally not awaited
-            // noinspection JSIgnoredPromiseFromCall
-            fetchBootTime();
-        }
-
-        if (!state.steamStartTime) {
-            // Intentionally not awaited
-            // noinspection JSIgnoredPromiseFromCall
-            fetchSteamStartTime();
-        }
-
         if (!state.gameStartTime) {
             // Intentionally not awaited
             // noinspection JSIgnoredPromiseFromCall
             fetchGameStartTime();
         }
-    }, [setState, state.lastBootTime, state.steamStartTime, state.gameStartTime]);
+    }, [setState, state.gameStartTime]);
+
+    useEffect(() => {
+        async function fetchLastWakeTime() {
+            const lastWakeTime = await getLastWakeTime();
+            if (lastWakeTime) {
+                setState(prev => ({...prev, lastWakeTime}));
+            }
+        }
+
+        if (!state.lastWakeTime) {
+            // Intentionally not awaited
+            // noinspection JSIgnoredPromiseFromCall
+            fetchLastWakeTime();
+            // Usually only called after this plugin is installed mid-session,
+            // therefore the handler registered with SteamClient.System.RegisterForOnResumeFromSuspend
+            // hasn't been called yet.
+            // TODO: Maybe I should return the last boot time if we just booted?
+        }
+    }, [setState, state.lastWakeTime]);
 
     // Hide the overlay if we've turned it off
     return state.enabled ? <SincereClockOverlay /> : null;
