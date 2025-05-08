@@ -1,9 +1,10 @@
-import {usePluginState, ClockPosition} from "../state";
+import {usePluginState, ClockPosition, ClockMode} from "../state";
 import {CSSProperties, useEffect} from "react";
 import {getBootTime, getSteamStartTime, getGameStartTime} from "../utils/backend";
 import { Temporal } from "temporal-polyfill";
 import {UIComposition, useUIComposition} from "../hooks/ui";
 import {CLOCK_TYPES} from "./clock/modes";
+import {CLOCK_MODES} from "../constants";
 
 function getPositionClass(position: ClockPosition): string {
     return `position-${position}`;
@@ -38,10 +39,12 @@ function SincereClockOverlay() {
         fontSize: `${state.fontSize}px`,
     };
 
-    // Find the appropriate clock type and render it
     const now = Temporal.Now.instant();
-    const clockType = CLOCK_TYPES[state.clockMode];
-    const clockComponent = clockType.render(now, state);
+
+    // Get all enabled clock types
+    const enabledClockTypes = Object.entries(state.enabledClockModes)
+        .filter(([_, enabled]) => enabled)
+        .map(([clockMode]) => CLOCK_TYPES[clockMode as ClockMode]);
 
     return (
         <div
@@ -49,7 +52,18 @@ function SincereClockOverlay() {
             id="sincere-clock-overlay"
             className={positionClass}
         >
-            {clockComponent}
+            {enabledClockTypes.length > 0 ? (
+                <div className="clock-container">
+                    {enabledClockTypes.map((clockType) => (
+                        <div key={clockType.id} className="clock-item">
+                            {clockType.render(now, state)}
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                // Fallback to current time if nothing is selected
+                CLOCK_TYPES[CLOCK_MODES.CURRENT_TIME].render(now, state)
+            )}
         </div>
         // TODO: Use Intl.DateTimeFormat to internationalize the time display
     );
@@ -121,4 +135,3 @@ export default function SincereClockDisplay() {
     // because you can't call hooks conditionally within a component
     // MagicBlackDecky does the same thing
 }
-

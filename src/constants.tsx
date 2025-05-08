@@ -1,6 +1,5 @@
 import Color from "color";
-import {LuClock, LuCoffee, LuGamepad2, LuSquarePower} from "react-icons/lu";
-import {FaSteam} from "react-icons/fa6";
+import {ClockMode} from "./state";
 export const GlobalComponentName = "SincereClock";
 
 // Clock display constants
@@ -43,10 +42,10 @@ export const CLOCK_MODES = {
 
 export const DEFAULT_CLOCK_MODE = CLOCK_MODES.CURRENT_TIME;
 
-export const CLOCK_MODE_ICONS = {
-    [CLOCK_MODES.CURRENT_TIME]: <LuClock/>,
-    [CLOCK_MODES.SINCE_BOOT]: <LuSquarePower/>,
-    [CLOCK_MODES.SINCE_STEAM]: <FaSteam/>,
-    [CLOCK_MODES.SINCE_WAKE]: <LuCoffee/>,
-    [CLOCK_MODES.SINCE_GAME]: <LuGamepad2/>,
+export const DEFAULT_ENABLED_CLOCK_MODES: Readonly<Record<ClockMode, boolean>> = {
+    [CLOCK_MODES.CURRENT_TIME]: true, // Enable current time by default
+    [CLOCK_MODES.SINCE_BOOT]: false,
+    [CLOCK_MODES.SINCE_STEAM]: false,
+    [CLOCK_MODES.SINCE_WAKE]: false,
+    [CLOCK_MODES.SINCE_GAME]: false
 } as const;

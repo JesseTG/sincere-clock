@@ -8,7 +8,7 @@ import {
     DEFAULT_POSITION,
     CLOCK_POSITIONS,
     CLOCK_MODES,
-    DEFAULT_CLOCK_MODE
+    DEFAULT_CLOCK_MODE, DEFAULT_ENABLED_CLOCK_MODES
 } from './constants';
 import { Temporal } from 'temporal-polyfill';
 
@@ -33,7 +33,9 @@ export class State {
     public readonly fontColor = DEFAULT_FONT_COLOR;
     public readonly backgroundColor = DEFAULT_BACKGROUND_COLOR;
     public readonly position: ClockPosition = DEFAULT_POSITION;
-    public readonly clockMode: ClockMode = DEFAULT_CLOCK_MODE;
+
+    // Clone the default enabled clock modes
+    public readonly enabledClockModes: Readonly<Record<ClockMode, boolean>> = { ...DEFAULT_ENABLED_CLOCK_MODES };
 }
 
 export type StateSetter<T> = Dispatch<SetStateAction<T>>;
@@ -50,4 +52,3 @@ export const usePluginState = () => {
 
     return [state, setState, context] as [State, (setter: (state: State) => State) => void, StateManager<State>];
 };
-

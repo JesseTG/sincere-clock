@@ -16,7 +16,7 @@ import {
     FONT_SIZE_MAX,
     FONT_SIZE_STEP,
 } from "../constants";
-import {CLOCK_MODE_OPTIONS} from "./clock/modes";
+import {CLOCK_TYPES} from "./clock/modes";
 
 export function SincereClockSettings() {
     const [state, setState] = usePluginState();
@@ -67,8 +67,14 @@ export function SincereClockSettings() {
         setState((prev) => ({...prev, position}));
     }
 
-    function handleClockModeChange(clockMode: ClockMode) {
-        setState((prev) => ({...prev, clockMode}));
+    function handleClockModeToggle(clockMode: ClockMode, enabled: boolean) {
+        setState((prev) => ({
+            ...prev,
+            enabledClockModes: {
+                ...prev.enabledClockModes,
+                [clockMode]: enabled
+            }
+        }));
     }
 
     // TODO: I want to move this to the CSS,
@@ -93,15 +99,18 @@ export function SincereClockSettings() {
                         onChange={handleToggleChange}
                     />
                 </PanelSectionRow>
-
-                <PanelSectionRow>
-                    <Dropdown
-                        menuLabel="Clock Mode"
-                        selectedOption={state.clockMode}
-                        rgOptions={CLOCK_MODE_OPTIONS}
-                        onChange={(e) => handleClockModeChange(e.data as ClockMode)}
-                    />
-                </PanelSectionRow>
+                <PanelSection title="Clock Types">
+                    {Object.values(CLOCK_TYPES).map((clockType) => (
+                        <PanelSectionRow key={clockType.id}>
+                            <ToggleField
+                                icon={clockType.icon}
+                                label={clockType.name}
+                                checked={state.enabledClockModes[clockType.id]}
+                                onChange={(checked) => handleClockModeToggle(clockType.id, checked)}
+                            />
+                        </PanelSectionRow>
+                    ))}
+                </PanelSection>
 
                 <PanelSectionRow>
                     <SliderField
