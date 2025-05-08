@@ -2,6 +2,7 @@ import {Temporal} from "temporal-polyfill";
 import {format} from "../../utils/timeUtils";
 import {ReactElement} from "react";
 import {LuGamepad2} from "react-icons/lu";
+import UnsetTime from "./UnsetTime";
 
 export interface TimeSinceGameStartedProps {
     startTime: Temporal.Instant | null;
@@ -14,7 +15,7 @@ export default function TimeSinceGameStarted(props: TimeSinceGameStartedProps) {
         component = <span className={"duration"}>{format(props.now.since(props.startTime))}</span>;
     }
     else {
-        component = <span className={"duration"}>-:-:-</span>;
+        component = <UnsetTime/>;
     }
 
     return (

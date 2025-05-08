@@ -2,6 +2,7 @@ import {Temporal} from "temporal-polyfill";
 import {format} from "../../utils/timeUtils";
 import {ReactElement} from "react";
 import {FaSteam} from "react-icons/fa6";
+import UnsetTime from "./UnsetTime";
 
 export interface TimeSinceSteamStartedProps {
     startTime: Temporal.Instant | null;
@@ -14,7 +15,7 @@ export default function TimeSinceSteamStarted(props: TimeSinceSteamStartedProps)
         component = <span className={"duration"}>{format(props.now.since(props.startTime))}</span>;
     }
     else {
-        component = <span className={"duration"}>-:-:-</span>;
+        component = <UnsetTime/>;
     }
 
     return (

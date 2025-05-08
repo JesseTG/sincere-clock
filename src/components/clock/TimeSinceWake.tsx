@@ -2,6 +2,7 @@ import {Temporal} from "temporal-polyfill";
 import {format} from "../../utils/timeUtils";
 import {ReactElement} from "react";
 import {LuCoffee} from "react-icons/lu";
+import UnsetTime from "./UnsetTime";
 
 export interface TimeSinceWakeProps {
     wakeTime: Temporal.Instant | null;
@@ -14,7 +15,7 @@ export default function TimeSinceWake(props: TimeSinceWakeProps) {
         component = <span className={"duration"}>{format(props.now.since(props.wakeTime))}</span>;
     }
     else {
-        component = <span className={"duration"}>-:-:-</span>;
+        component = <UnsetTime/>
     }
 
     return (
