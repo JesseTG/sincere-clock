@@ -1,8 +1,6 @@
 :root {
     --position-offset: 10px;
     --sincere-clock-swatch-size: 24px;
-    --sincere-clock-unset-color: rgba(255, 0, 0, 0.7);
-    --sincere-clock-unset-dim-color: rgba(255, 0, 0, 0.2);
 }
 
 @font-face {
@@ -34,20 +32,21 @@
         }
 
         .unset {
-            color: var(--sincere-clock-unset-color);
-            animation: clock-blink 1s infinite ease-in-out;
+            animation-duration: 1s;
+            animation-direction: alternate;
+            animation-name: clock-blink;
+            animation-iteration-count: infinite;
+            animation-timing-function: steps(2, jump-none);
         }
     }
 }
 
 @keyframes clock-blink {
-    0%, 100% {
+    0% {
         opacity: 1;
-        color: var(--sincere-clock-unset-color);
     }
-    50% {
+    100% {
         opacity: 0.5;
-        color: var(--sincere-clock-unset-dim-color);
     }
 }
 
